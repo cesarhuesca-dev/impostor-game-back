@@ -1,0 +1,7 @@
+{
+  "game" : {
+    "notFound" : "Game room not found",
+    "alreadyExist" : "Game already exist"
+  },
+  "unexpected-error" : "Unexpected error"
+}

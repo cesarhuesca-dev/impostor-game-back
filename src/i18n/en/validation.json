@@ -1,0 +1,72 @@
+{
+  "isDefined": "{property} must be defined",
+  "isOptional": "{property} is optional",
+
+  "isEmpty": "{property} must be empty",
+  "isNotEmpty": "{property} should not be empty",
+
+  "isString": "{property} must be a string",
+  "isNumber": "{property} must be a number",
+  "isInt": "{property} must be an integer number",
+  "isBoolean": "{property} must be a boolean value",
+  "isDate": "{property} must be a Date instance",
+  "isArray": "{property} must be an array",
+  "isObject": "{property} must be an object",
+
+  "isEmail": "{property} must be an email",
+  "isUrl": "{property} must be a URL address",
+  "isUUID": "{property} must be a UUID",
+  "isIP": "{property} must be an IP address",
+
+  "isEnum": "{property} must be a valid enum value",
+
+  "min": "{property} must not be less than {constraints.0}",
+  "max": "{property} must not be greater than {constraints.0}",
+
+  "minLength": "{property} must be longer than or equal to {constraints.0} characters",
+  "maxLength": "{property} must be shorter than or equal to {constraints.0} characters",
+  "length": "{property} must be longer than or equal to {constraints.0} and shorter than or equal to {constraints.1} characters",
+
+  "matches": "{property} must match {constraints.0} regular expression",
+  "notMatches": "{property} must not match {constraints.0} regular expression",
+
+  "contains": "{property} must contain a {constraints.0} string",
+  "notContains": "{property} must not contain a {constraints.0} string",
+
+  "isIn": "{property} must be one of the following values: {constraints.0}",
+  "isNotIn": "{property} must not be one of the following values: {constraints.0}",
+
+  "isPositive": "{property} must be a positive number",
+  "isNegative": "{property} must be a negative number",
+
+  "isDivisibleBy": "{property} must be divisible by {constraints.0}",
+
+  "arrayContains": "{property} must contain {constraints.0} values",
+  "arrayNotContains": "{property} must not contain {constraints.0} values",
+  "arrayNotEmpty": "{property} should not be empty",
+  "arrayMinSize": "{property} must contain at least {constraints.0} elements",
+  "arrayMaxSize": "{property} must contain no more than {constraints.0} elements",
+
+  "isDateString": "{property} must be a valid ISO 8601 date string",
+  "isJSON": "{property} must be a valid JSON string",
+
+  "isLowercase": "{property} must be a lowercase string",
+  "isUppercase": "{property} must be an uppercase string",
+
+  "isMobilePhone": "{property} must be a valid phone number",
+  "isPostalCode": "{property} must be a valid postal code",
+  "isCreditCard": "{property} must be a credit card number",
+
+  "isMongoId": "{property} must be a mongodb id",
+
+  "validateNested": "nested property {property} must be either object or array",
+
+  "customValidation": "{property} is invalid",
+  "unknownValue": "an unknown value was passed to the validate function",
+
+  "whitelistValidation" : "{property} name should not exist",
+
+  "db" : {
+    "not-found": "{element} not found"
+  }
+}

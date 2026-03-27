@@ -1,0 +1,11 @@
+{
+  "singleQuote": true,
+  "trailingComma" : "none",
+  "endOfLine" : "auto",
+  "embeddedLanguageFormatting" : "auto",
+  "objectWrap" : "preserve",
+  "bracketSameLine": false,
+  "singleAttributePerLine" : false,
+  "bracketSpacing" : true,
+  "printWidth": 100
+}

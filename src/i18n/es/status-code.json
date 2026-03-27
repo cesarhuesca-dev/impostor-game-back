@@ -1,0 +1,17 @@
+{
+  "400": "Solicitud incorrecta",
+  "401": "No autorizado",
+  "403": "Prohibido",
+  "404": "No encontrado",
+  "405": "Método no permitido",
+  "408": "Tiempo de espera agotado",
+  "409": "Conflicto",
+  "413": "Carga útil demasiado grande",
+  "415": "Tipo de medio no soportado",
+  "422": "Entidad no procesable",
+  "429": "Demasiadas solicitudes",
+  "500": "Error interno del servidor",
+  "502": "Puerta de enlace incorrecta",
+  "503": "Servicio no disponible",
+  "504": "Tiempo de espera de la puerta de enlace"
+}
