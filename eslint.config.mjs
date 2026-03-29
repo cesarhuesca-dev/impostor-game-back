@@ -8,9 +8,9 @@ export default tseslint.config(
   {
     ignores: ['eslint.config.mjs'],
   },
-  eslintPluginPrettierRecommended,
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  // eslintPluginPrettierRecommended,
+  // eslint.configs.recommended,
+  // ...tseslint.configs.recommended,
 
   {
     languageOptions: {

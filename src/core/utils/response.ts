@@ -28,4 +28,15 @@ export class ResponseBuilder {
       success: true
     };
   }
+
+  static buildNotSuccess(status = 400, message: string | string[] = []): ApiResponse<any> {
+    const messageFormated = Array.isArray(message) ? message : [message];
+
+    return {
+      status,
+      message: messageFormated,
+      data: [],
+      success: false
+    };
+  }
 }

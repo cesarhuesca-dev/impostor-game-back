@@ -1,4 +1,32 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateGameDto } from './create-game.dto';
+import { IsString, MinLength, IsNotEmpty, IsNumber, IsInt, IsOptional, IsPositive, IsBoolean } from 'class-validator';
+import { i18nValidationMessage } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 
-export class UpdateGameDto extends PartialType(CreateGameDto) {}
+export class UpdateGameDto extends PartialType(CreateGameDto) {
+
+
+  @IsInt({ message: i18nValidationMessage<I18nTranslations>('validation.isInt')})
+  @IsPositive({ message: i18nValidationMessage<I18nTranslations>('validation.isPositive')})
+  @IsOptional()
+  roomPlayersJoined?: number;
+
+  @IsInt({ message: i18nValidationMessage<I18nTranslations>('validation.isInt')})
+  @IsPositive({ message: i18nValidationMessage<I18nTranslations>('validation.isPositive')})
+  @IsOptional()
+  round?: number;
+
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
+  @IsOptional()
+  isShowingWord?: boolean;
+  
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
+  @IsOptional()
+  isShowingImpostor?: boolean;
+
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
+  @IsOptional()
+  isGameStarted?: boolean;
+
+}

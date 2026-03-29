@@ -3,19 +3,20 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule } from 'nestjs-i18n';
 import { JwtModule } from '@nestjs/jwt';
-
-import { configOptions, databaseOptions, i18nOptions, jwtOptions } from './config';
+import { PassportModule } from '@nestjs/passport';
+import { configOptions, databaseOptions, i18nOptions, jwtOptions, passportOptions } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot(configOptions),
     TypeOrmModule.forRootAsync(databaseOptions),
+    I18nModule.forRootAsync(i18nOptions),
     JwtModule.registerAsync(jwtOptions),
-    I18nModule.forRootAsync(i18nOptions)
+    PassportModule.registerAsync(passportOptions),
   ],
   providers: [
     //REVISAR SI TENGO QUE PONER ESTRATEGIAS PARA EL AUTH JWT
   ],
-  exports: [ConfigServerModule, ConfigModule, TypeOrmModule, JwtModule, I18nModule]
+  exports: [ConfigServerModule, ConfigModule, TypeOrmModule, I18nModule, JwtModule, PassportModule]
 })
 export class ConfigServerModule {}

@@ -3,7 +3,8 @@ import { AppModule } from './app.module';
 import { envs } from './core/config';
 import { Logger } from '@nestjs/common';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
-import { I18nExceptionFilter } from './core/filters/exception.filter';
+import { CustomExceptionFilter } from './core/filters/exception.filter';
+import { I18nCustomValidationExceptionFilter } from './core/filters/i18n-validation-exception.filter';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -13,8 +14,9 @@ async function bootstrap(): Promise<void> {
 
   app.setGlobalPrefix('api');
   app.useGlobalFilters(
+    new CustomExceptionFilter(),
     new I18nValidationExceptionFilter({ detailedErrors: false }),
-    new I18nExceptionFilter()
+    new I18nCustomValidationExceptionFilter()
   );
   app.useGlobalPipes(
     new I18nValidationPipe({
@@ -23,6 +25,7 @@ async function bootstrap(): Promise<void> {
       transform: true
     })
   );
+  app.enableCors()
 
   await app.listen(env.SERVER_PORT);
   logger.log(`Server running on port ${env.SERVER_PORT}`);

@@ -6,82 +6,37 @@ import { Response } from 'express';
 import { I18nContext } from 'nestjs-i18n';
 import { ApiResponse } from '../interface/response.interface';
 
+
+/**
+ * ESTA CONTROLADOR MANEJA LAS EXCEPCIONES GENERALES Y FORZADAS
+ */
+
 @Catch()
-export class I18nExceptionFilter implements ExceptionFilter {
+export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const i18n = I18nContext.current(host);
     const errorResposne: {
       message: string;
       error: string;
       statusCode: number;
     } = exception.getResponse();
 
-    console.log(errorResposne);
+    // console.log(exception)
 
-    let json: ApiResponse<any> = {
-      status: 0,
-      success: false
-    };
 
-    if (i18n) {
-      const errorList = this.formatValidationErrors(exception, i18n);
 
-      json = {
-        status: errorResposne.statusCode,
-        error: i18n?.t(`status-code.${errorResposne.statusCode}`, {
-          lang: I18nContext.current()?.lang
-        }),
-        message: errorList,
-        timestamp: new Date().toISOString(),
-        success: false
-      };
-    } else {
       //!TODO INTENTAR TRADUCIR ESTE ERROR CUANDO NO SE PUEDE CONTROLAR CON CONTEXTO DE TRADUCCION
-      json = {
+      const json: ApiResponse<any> = {
         status: errorResposne.statusCode,
         error: errorResposne.error,
         message: [errorResposne.message],
         timestamp: new Date().toISOString(),
         success: false
       };
-    }
+    
 
     return response.status(errorResposne.statusCode).json(json);
   }
 
-  private formatValidationErrors(exception: any, i18n: I18nContext) {
-    const errors: any[] = exception.errors ?? [];
-    const errorMessage: string = exception?.response?.message || null;
-    const errorList: string[] = [];
-
-    try {
-      if (errorMessage) {
-        errorList.push(errorMessage);
-      }
-
-      errors.forEach((err) => {
-        if (typeof err === 'string') {
-          errorList.push(err);
-        }
-
-        if (err.constraints) {
-          Object.keys(err.constraints).forEach((key) => {
-            const constraints = JSON.parse(err.constraints[key].split('|')[1]).constraints ?? [];
-
-            errorList.push(
-              i18n.t(`validation.${key}`, {
-                args: { property: err.property, constraints: constraints }
-              })
-            );
-          });
-        }
-      });
-
-      return errorList;
-    } catch {
-      return [];
-    }
-  }
 }

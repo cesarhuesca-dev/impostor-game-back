@@ -1,7 +1,24 @@
 {
   "game" : {
     "notFound" : "Sala de juego no encontrado",
-    "alreadyExist" : "La sala de juego ya existe"
+    "invalidInputs" : "Campos no válidos",
+    "alreadyExist" : "La sala de juego ya existe",
+    "fullGameRoom" : "La sala de juego esta llena"
+  },
+  "player" : {
+    "notFound" : "Jugador no encontrado",
+    "alreadyExist" : "El jugador con ese nombre ya existe"
+  },
+  "properties" : {
+    "id": "Identificador",
+    "roomName": "Sala de juego",
+    "roomPassword": "Contraseña de la sala",
+    "roomPlayers": "Jugadores de la sala",
+    "customWords": "Palabras personalizadas",
+    "specificCategory": "Categoría específica",
+    "category": "Categoría",
+    "multipleImpostors": "Multiples impostores",
+    "overlay": "Overlay"
   },
   "unexpected-error" : "Error inesperado"
 }

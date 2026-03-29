@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { I18nService } from 'nestjs-i18n';
@@ -7,44 +7,35 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Game } from './entities/game.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { ResponseBuilder } from 'src/core/utils/response';
-import { GameDto } from './dto/game.dto';
 import { ExceptionBuilder } from 'src/core/utils/exception';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class GameService {
-  private readonly logger = new Logger('GameService');
 
   constructor(
     private readonly i18n: I18nService<I18nTranslations>,
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>
   ) {}
 
-  async findOne(id: string): Promise<Game> {
+  async findOne(term: string): Promise<Game | null> {
     try {
-      const game = await this.gameRepository.findOneBy({ id });
 
-      if (!game) {
-        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      let game: Game | null = null;
+
+      if(isUUID(term)){
+        game = await this.gameRepository.findOneBy({ id : term.trim() });
+      }else{
+        game = await this.gameRepository.findOneBy({ roomName: term.trim() });
       }
 
       return game;
     } catch (error) {
-      ExceptionBuilder.handleException(error);
+      ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async findOnePlain(id: string) {
-    try {
-      const game = await this.findOne(id);
-
-      return ResponseBuilder.build<GameDto>(Game.toPlain(game));
-    } catch (error) {
-      ExceptionBuilder.handleException(error);
-    }
-  }
-
-  async create(createGameDto: CreateGameDto) {
+  async create(createGameDto: CreateGameDto): Promise<Game> {
     try {
       const salt = await bcrypt.genSalt();
 
@@ -60,15 +51,20 @@ export class GameService {
 
       await this.gameRepository.save(game);
 
-      return ResponseBuilder.build<GameDto>(Game.toPlain(game));
+      return game;
+
     } catch (error) {
-      ExceptionBuilder.handleException(error);
+      ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async update(id: string, updateGameDto: UpdateGameDto) {
+  async update(id: string, updateGameDto: UpdateGameDto): Promise<Game> {
     try {
       const game = await this.findOne(id);
+
+      if (!game) {
+        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      }
 
       const salt = await bcrypt.genSalt();
 
@@ -81,21 +77,43 @@ export class GameService {
         id: game.id
       };
 
-      await this.gameRepository.save(updatedData, { reload: true });
+      const result = await this.gameRepository.save(updatedData, { reload: true });
 
-      return ResponseBuilder.build<GameDto>(Game.toPlain(updatedData));
+      return result;
     } catch (error) {
-      ExceptionBuilder.handleException(error);
+      ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<boolean> {
     try {
       await this.findOne(id);
       await this.gameRepository.delete(id);
-      return ResponseBuilder.buildSuccess();
+      return true;
     } catch (error) {
-      ExceptionBuilder.handleException(error);
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
+
+  async verifyJoinGame(roomName: string, roomPassword: string): Promise<boolean> {
+
+    try {
+    
+      const game = await this.findOne(roomName);
+
+      if (!game) {
+        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      }
+
+      const isMatch = await bcrypt.compare(roomPassword, game.roomPassword);
+
+      if(!game || !isMatch) throw new BadRequestException(this.i18n.t('entities.game.invalidInputs'));
+      if(game.roomPlayersJoined >= game.roomPlayers) throw new UnauthorizedException(this.i18n.t('entities.game.fullGameRoom'))
+
+      return true;
+
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 }

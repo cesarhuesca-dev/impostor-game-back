@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { GameDto } from '../dto/game.dto';
+import { Player } from 'src/api/user/entities/player.entity';
 
 @Entity({ name: 'games' })
 export class Game {
@@ -12,7 +13,7 @@ export class Game {
   @Column({ type: 'text' })
   roomPassword: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'integer', default : 4 })
   roomPlayers: number;
 
   @Column({ type: 'bool', default: false })
@@ -29,6 +30,26 @@ export class Game {
 
   @Column({ type: 'boolean', default: false })
   overlay: boolean;
+
+  //ESTDOS PARA CONTROL DE LA SALA
+
+  @Column({ type: 'integer', default : 0 })
+  roomPlayersJoined: number;
+
+  @Column({ type: 'integer', default : 0 })
+  round: number;
+
+  @Column({ type: 'bool', default : false })
+  isShowingWord: boolean;
+  
+  @Column({ type: 'bool', default : false })
+  isShowingImpostor: boolean;
+
+  @Column({ type: 'bool', default : false })
+  isGameStarted: boolean;
+
+  @OneToMany(() => Player, player => player.game)
+  player: Player
 
   static toPlain(game: Game): GameDto {
     return {
