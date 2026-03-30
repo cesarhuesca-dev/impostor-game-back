@@ -4,6 +4,9 @@
 /build
 /postgres
 
+/content/games/*
+!/content/games/.gitkeep
+
 # Logs
 logs
 *.log

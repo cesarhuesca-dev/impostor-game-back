@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFoundException, UseInterceptors, UploadedFile, ParseFilePipeBuilder, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFoundException, UseInterceptors, UploadedFile, ParseFilePipeBuilder, BadRequestException, Res } from '@nestjs/common';
 import { ResponseBuilder } from 'src/core/utils/response';
 import { I18nContext, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
@@ -15,6 +15,8 @@ export class GameController {
     private readonly userService: PlayerService, 
     private readonly i18n: I18nService<I18nTranslations>
   ) {}
+
+  //#region GAME REGION
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -49,6 +51,10 @@ export class GameController {
     return ResponseBuilder.buildSuccess();
   }
 
+  //#endregion
+
+  //#region JOIN REGION
+
   @Post('join/verify')
   async verifyJoinGame(@Body() verifyGameDto: VerifyGameDto) {
 
@@ -67,6 +73,10 @@ export class GameController {
     const result = await this.joinService.joinGame(createJoinGameDto)
     return ResponseBuilder.build<string>(result);
   }
+
+  //#endregion
+
+  //#region PLAYER REGION
 
   @Get('player/:id')
   async getPlayer(@Param('id', ParseUUIDPipe) id: string) {
@@ -88,6 +98,13 @@ export class GameController {
     if(!result) return ResponseBuilder.buildNotSuccess();
 
     return ResponseBuilder.buildSuccess();
+  }
+
+  @Get('player/image/:id')
+  async getPlayerImage(@Res() res, @Param('id', ParseUUIDPipe) id: string) {
+    const result = await this.userService.getImage(id);
+    if(!result) return res.status(400).json(ResponseBuilder.buildNotSuccess());
+    return res.sendFile(result);
   }
 
   @Post('player/image/:id')
@@ -116,4 +133,6 @@ export class GameController {
     if(!result) return ResponseBuilder.buildNotSuccess();
     return ResponseBuilder.buildSuccess();
   }
+
+  //#endregion
 }

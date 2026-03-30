@@ -72,11 +72,24 @@ export class PlayerService {
     }
   }
 
-  async uploadImage(id: string, file: Express.Multer.File): Promise<boolean> {
+  async getImage(id: string): Promise<string | false>{
     try {
 
-      console.log('id', id)
-      console.log('file', file)
+      const player = await this.findOne(id);
+
+      if(!player){
+        throw new NotFoundException(this.i18n.t('entities.player.notFound'));
+      }
+
+      return this.filesService.getImage(player.game.id, player.id);
+
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'PlayerService');
+    }
+  }
+
+  async uploadImage(id: string, file: Express.Multer.File): Promise<boolean> {
+    try {
 
       const player = await this.findOne(id);
 
@@ -86,8 +99,9 @@ export class PlayerService {
 
       const { mimetype, buffer } = file;
 
-      
-      return true
+      const result = await this.filesService.savePlayerImage(player.game.id, player.id, mimetype, buffer);
+
+      return result
     } catch (error) {
       ExceptionBuilder.handleException(error, 'PlayerService');
     }
