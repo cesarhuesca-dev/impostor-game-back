@@ -1,12 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ExceptionBuilder } from 'src/core/utils/exception';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Player } from './entities/player.entity';
-import { Game } from '../game/entities/game.entity';
 import { isUUID } from 'class-validator';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
+import { FilesService } from 'src/common/services/files.service';
+import { Game, Player } from '../entities';
 
 @Injectable()
 export class PlayerService {
@@ -14,7 +14,8 @@ export class PlayerService {
   constructor(
     @InjectRepository(Player) private readonly playerRepository : Repository<Player>,
     @InjectRepository(Game) private readonly gameRepository : Repository<Game>,
-    private readonly i18n: I18nService<I18nTranslations>
+    private readonly i18n: I18nService<I18nTranslations>,
+    private readonly filesService: FilesService
   ) {}
 
   
@@ -64,10 +65,31 @@ export class PlayerService {
   async remove(id: string): Promise<boolean> {
     try {
       await this.findOne(id);
-      await this.playerRepository.delete(id);
-      return true;
+      const result = await this.playerRepository.delete(id);
+      return (result && result.affected && result.affected > 0) ? true : false;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, 'PlayerService');
+    }
+  }
+
+  async uploadImage(id: string, file: Express.Multer.File): Promise<boolean> {
+    try {
+
+      console.log('id', id)
+      console.log('file', file)
+
+      const player = await this.findOne(id);
+
+      if(!player){
+        throw new NotFoundException(this.i18n.t('entities.player.notFound'));
+      }
+
+      const { mimetype, buffer } = file;
+
+      
+      return true
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'PlayerService');
     }
   }
 }

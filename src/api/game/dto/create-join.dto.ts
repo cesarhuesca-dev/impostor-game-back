@@ -1,7 +1,7 @@
 import { IsString, MinLength, IsNotEmpty } from "class-validator";
 import { i18nValidationMessage } from "nestjs-i18n";
 import { I18nTranslations } from "src/i18n/generated/i18n.generated";
-import { VerifyGameDto } from "./verify-game.dto copy";
+import { VerifyGameDto } from "./verify-game.dto";
 
 export class CreateJoinGameDto extends VerifyGameDto {
 

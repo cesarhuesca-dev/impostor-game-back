@@ -4,9 +4,9 @@ import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { Player } from "src/api/user/entities/player.entity";
 import { JwtPayloadInterface } from "../interface/jwt.interface";
 import { EnvInterface } from "../interface/env.interface";
+import { Player } from "src/api/game/entities/player.entity";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

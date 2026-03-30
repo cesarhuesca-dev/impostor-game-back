@@ -19,7 +19,7 @@ export class AuthService {
     const payload : JwtPayloadInterface = {
       gameId,
       playerId
-    }
+    };
 
     return this.jwtService.sign(payload, {secret : this.configService.get('JWT_SECRET')});
   }
@@ -35,7 +35,7 @@ export class AuthService {
 
       return verified;
     } catch (error) {
-      return null
+      return null;
     }
     
   }

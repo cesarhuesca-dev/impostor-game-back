@@ -140,9 +140,8 @@ export type I18nTranslations = {
         "customValidation": string;
         "unknownValue": string;
         "whitelistValidation": string;
-        "db": {
-            "not-found": string;
-        };
+        "fileRequired": string;
+        "fileValidation": string;
     };
 };
 /* prettier-ignore */

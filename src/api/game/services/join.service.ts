@@ -1,12 +1,11 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateJoinGameDto } from './dto/create-join.dto';
-import { GameService } from '../game/game.service';
-import { VerifyGameDto } from './dto/verify-game.dto copy';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
 import { ExceptionBuilder } from 'src/core/utils/exception';
-import { PlayerService } from '../user/player.service';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/common/services/auth.service';
+import { VerifyGameDto, CreateJoinGameDto } from '../dto';
+import { GameService } from './game.service';
+import { PlayerService } from './player.service';
 
 @Injectable()
 export class JoinService {

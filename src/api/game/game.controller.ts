@@ -1,17 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFoundException } from '@nestjs/common';
-import { GameService } from './game.service';
-import { CreateGameDto } from './dto/create-game.dto';
-import { UpdateGameDto } from './dto/update-game.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, NotFoundException, UseInterceptors, UploadedFile, ParseFilePipeBuilder, BadRequestException } from '@nestjs/common';
 import { ResponseBuilder } from 'src/core/utils/response';
-import { GameDto } from './dto/game.dto';
-import { Game } from './entities/game.entity';
-import { I18nService } from 'nestjs-i18n';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { GameService, JoinService, PlayerService } from './services';
+import { GameDto, CreateGameDto, UpdateGameDto, VerifyGameDto, CreateJoinGameDto, PlayerDto } from './dto';
+import { Game, Player } from './entities';
 
 @Controller('game')
 export class GameController {
   constructor(
     private readonly gameService: GameService,
+    private readonly joinService: JoinService,
+    private readonly userService: PlayerService, 
     private readonly i18n: I18nService<I18nTranslations>
   ) {}
 
@@ -45,6 +46,74 @@ export class GameController {
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 
+    return ResponseBuilder.buildSuccess();
+  }
+
+  @Post('join/verify')
+  async verifyJoinGame(@Body() verifyGameDto: VerifyGameDto) {
+
+    const result = await this.joinService.verifyJoinGame(verifyGameDto);
+
+    if(result){
+      return ResponseBuilder.buildSuccess();
+    }else{
+      return ResponseBuilder.buildNotSuccess()
+    }
+
+  }
+
+  @Post('join')
+  async joinGame(@Body() createJoinGameDto: CreateJoinGameDto) {
+    const result = await this.joinService.joinGame(createJoinGameDto)
+    return ResponseBuilder.build<string>(result);
+  }
+
+  @Get('player/:id')
+  async getPlayer(@Param('id', ParseUUIDPipe) id: string) {
+    
+    const result = await this.userService.findOne(id);
+
+    if(!result){
+      throw new NotFoundException(this.i18n.t('entities.player.alreadyExist'));
+    }
+    
+    return ResponseBuilder.build<PlayerDto>(Player.toPlain(result));
+  }
+
+  @Delete('player/:id')
+  async deletePlayer(@Param('id', ParseUUIDPipe) id: string) {
+
+    const result = await this.userService.remove(id);
+
+    if(!result) return ResponseBuilder.buildNotSuccess();
+
+    return ResponseBuilder.buildSuccess();
+  }
+
+  @Post('player/image/:id')
+  @UseInterceptors(FileInterceptor('file', {limits : {files: 1}}))
+  async uploadPlayerImage(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+      .addFileTypeValidator({
+        fileType : /^image\/(png|jpeg|jpg)$/,
+        errorMessage : () => {
+          const i18n = I18nContext.current<I18nTranslations>();
+          throw new BadRequestException(i18n!.t('validation.fileValidation'));
+        }
+      })
+      .build({
+        fileIsRequired : true,
+        exceptionFactory: () => {
+          const i18n = I18nContext.current<I18nTranslations>();
+          throw new BadRequestException(i18n!.t('validation.fileRequired'));
+        }
+      })
+    ) file: Express.Multer.File,
+    @Param('id', ParseUUIDPipe) id: string
+  ) {
+    const result = await this.userService.uploadImage(id, file);
+    if(!result) return ResponseBuilder.buildNotSuccess();
     return ResponseBuilder.buildSuccess();
   }
 }

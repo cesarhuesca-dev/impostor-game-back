@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { CreateGameDto } from './dto/create-game.dto';
-import { UpdateGameDto } from './dto/update-game.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Game } from './entities/game.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import { ExceptionBuilder } from 'src/core/utils/exception';
 import { isUUID } from 'class-validator';
+import { ExceptionBuilder } from 'src/core/utils/exception';
+import { CreateGameDto, UpdateGameDto } from '../dto';
+import { Game } from '../entities';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class GameService {

@@ -66,9 +66,7 @@
 
   "whitelistValidation" : "{property} no esta permitido",
 
-  "db" : {
-    "not-found": "{element} no encontrado"
-
-  }
+  "fileRequired" : "El fichero es obligatorio",
+  "fileValidation" : "El fichero no es válido"
 
 }

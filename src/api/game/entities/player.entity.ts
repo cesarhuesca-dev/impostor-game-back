@@ -1,6 +1,6 @@
-import { Game } from "src/api/game/entities/game.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PlayerDto } from "../dto/player.dto";
+import { PlayerDto } from "../dto";
+import { Game } from "./game.entity";
 
 @Entity({name: 'player'})
 export class Player {
