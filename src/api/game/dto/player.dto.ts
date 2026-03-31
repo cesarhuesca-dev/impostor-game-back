@@ -2,8 +2,9 @@ import { GameDto } from "src/api/game/dto/game.dto";
 
 export interface PlayerDto {
 
+  id: string;
   name: string;
-  avatarImg?: string;
+  avatarImg?: boolean;
   
   game: GameDto
 

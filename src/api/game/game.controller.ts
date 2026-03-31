@@ -6,6 +6,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { GameService, JoinService, PlayerService } from './services';
 import { GameDto, CreateGameDto, UpdateGameDto, VerifyGameDto, CreateJoinGameDto, PlayerDto } from './dto';
 import { Game, Player } from './entities';
+import { JoinDto } from './dto/join.dto';
 
 @Controller('game')
 export class GameController {
@@ -71,7 +72,7 @@ export class GameController {
   @Post('join')
   async joinGame(@Body() createJoinGameDto: CreateJoinGameDto) {
     const result = await this.joinService.joinGame(createJoinGameDto)
-    return ResponseBuilder.build<string>(result);
+    return ResponseBuilder.build<JoinDto>(result);
   }
 
   //#endregion

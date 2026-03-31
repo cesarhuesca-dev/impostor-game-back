@@ -53,6 +53,7 @@ export class Game {
 
   static toPlain(game: Game): GameDto {
     return {
+      id: game.id,
       roomName: game.roomName,
       roomPlayers: game.roomPlayers,
       customWords: game.customWords,

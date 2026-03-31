@@ -6,6 +6,8 @@ import { AuthService } from 'src/common/services/auth.service';
 import { VerifyGameDto, CreateJoinGameDto } from '../dto';
 import { GameService } from './game.service';
 import { PlayerService } from './player.service';
+import { JoinDto } from '../dto/join.dto';
+import { Player } from '../entities';
 
 @Injectable()
 export class JoinService {
@@ -26,7 +28,7 @@ export class JoinService {
     return verified;
   }
 
-  async joinGame(createJoinGameDto: CreateJoinGameDto): Promise<string> {
+  async joinGame(createJoinGameDto: CreateJoinGameDto): Promise<JoinDto> {
 
     try {
       
@@ -48,7 +50,10 @@ export class JoinService {
 
       await this.gameService.update(game.id, { roomPlayersJoined: (game.roomPlayersJoined + 1) });
 
-      return this.authService.getJwtToken(game.id, player.id);
+      return {
+        player: Player.toPlain(player),
+        token: this.authService.getJwtToken(game.id, player.id)
+      };
 
     } catch (error) {
       ExceptionBuilder.handleException(error, 'JoinService');

@@ -1,5 +1,5 @@
 export interface GameDto {
-  id?: string;
+  id: string;
   roomName: string;
   roomPassword?: string;
   roomPlayers: number;

@@ -7,6 +7,7 @@ import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
 import { FilesService } from 'src/common/services/files.service';
 import { Game, Player } from '../entities';
+import { UpdatePlayerDto } from '../dto';
 
 @Injectable()
 export class PlayerService {
@@ -62,6 +63,29 @@ export class PlayerService {
 
   }
 
+  async update(id: string, updateGameDto: UpdatePlayerDto): Promise<Player> {
+      try {
+        const player = await this.findOne(id);
+  
+        if (!player) {
+          throw new NotFoundException(this.i18n.t('entities.player.notFound'));
+        }
+  
+  
+        const updatedData = {
+          ...player,
+          ...updateGameDto,
+          id: player.id
+        };
+  
+        const result = await this.playerRepository.save(updatedData, { reload: true });
+  
+        return result;
+      } catch (error) {
+        ExceptionBuilder.handleException(error, 'PlayerService');
+      }
+    }
+
   async remove(id: string): Promise<boolean> {
     try {
       await this.findOne(id);
@@ -100,6 +124,10 @@ export class PlayerService {
       const { mimetype, buffer } = file;
 
       const result = await this.filesService.savePlayerImage(player.game.id, player.id, mimetype, buffer);
+
+      if(result){
+        await this.update(player.id, {avatarImg : true});
+      }
 
       return result
     } catch (error) {
