@@ -9,7 +9,7 @@ export const jwtOptions: JwtModuleAsyncOptions = {
   useFactory: (configService: ConfigService<EnvInterface>) => ({
     secret: configService.get('JWT_SECRET'),
     signOptions: {
-      expiresIn: "2h",
+      expiresIn: '2h'
     },
     global: true
   }),

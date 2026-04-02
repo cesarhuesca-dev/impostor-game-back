@@ -4,8 +4,9 @@ export interface PlayerDto {
 
   id: string;
   name: string;
-  avatarImg?: boolean;
+  host: boolean;
+  avatarImg: boolean;
   
-  game: GameDto
+  game?: GameDto
 
 }

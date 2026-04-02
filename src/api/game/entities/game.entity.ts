@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { GameDto } from '../dto/game.dto';
 import { Player } from './player.entity';
+import { PlayerDto } from '../dto';
 
 @Entity({ name: 'games' })
 export class Game {
@@ -40,19 +41,20 @@ export class Game {
   round: number;
 
   @Column({ type: 'bool', default : false })
-  isShowingWord: boolean;
+  showingWord: boolean;
   
   @Column({ type: 'bool', default : false })
-  isShowingImpostor: boolean;
+  showingImpostor: boolean;
 
   @Column({ type: 'bool', default : false })
-  isGameStarted: boolean;
+  gameStarted: boolean;
 
   @OneToMany(() => Player, player => player.game)
   player: Player
 
-  static toPlain(game: Game): GameDto {
-    return {
+  static toPlain(game: Game, players?: PlayerDto[]): GameDto {
+
+    let obj: GameDto = {
       id: game.id,
       roomName: game.roomName,
       roomPlayers: game.roomPlayers,
@@ -60,7 +62,18 @@ export class Game {
       specificCategory: game.specificCategory,
       category: game.category,
       multipleImpostors: game.multipleImpostors,
-      overlay: game.overlay
+      overlay: game.overlay,
+      gameStarted: game.gameStarted,
+      showingImpostor: game.showingImpostor,
+      showingWord: game.showingWord,
+      round: game.round,
+      roomPlayersJoined: game.roomPlayersJoined
     };
+
+    if(players){
+      obj.players = players;
+    }
+
+    return obj
   }
 }

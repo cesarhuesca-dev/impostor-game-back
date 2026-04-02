@@ -37,8 +37,22 @@ export class PlayerService {
       ExceptionBuilder.handleException(error, 'PlayerService');
     }
   }
+
+  async findPlayersByGame(idGame: string): Promise<Player[]> {
+    try {
+      
+      const players = await this.playerRepository.find({
+        where : {game : { id : idGame }}
+      });
+
+      return players;
+
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'PlayerService');
+    }
+  }
   
-  async createPlayer(playerName: string, gameId: string): Promise<Player>{
+  async createPlayer(playerName: string, gameId: string, host: boolean): Promise<Player>{
 
     try {
 
@@ -50,6 +64,7 @@ export class PlayerService {
 
       const objCreate = this.playerRepository.create({
         name: playerName.trim(),
+        host: host,
         game: await this.gameRepository.preload({id: gameId})
       })
 

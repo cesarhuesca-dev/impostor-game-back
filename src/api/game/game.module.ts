@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { GameController } from './game.controller';
 import { Game } from './entities/game.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Player } from './entities/player.entity';
@@ -10,13 +9,25 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CommonModule } from 'src/common/common.module';
 import { FilesService } from 'src/common/services/files.service';
 import { AuthService } from 'src/common/services/auth.service';
+import { GameController } from './controllers/game.controller';
+import { GamePlayerController } from './controllers/player.controller';
+import { GameJoinController } from './controllers/join.controller';
+import { JwtStrategy } from '../../common/strategies/jwt-strategy';
+import { PassportModule } from '@nestjs/passport';
+import { jwtOptions, passportOptions } from 'src/core/config';
 
 @Module({
-  controllers: [GameController],
+  controllers: [
+    GameController,
+    GamePlayerController,
+    GameJoinController,
+  ],
   imports: [
+    CommonModule,
     TypeOrmModule.forFeature([Game, Player]),
     JwtModule,
-    CommonModule
+    PassportModule.registerAsync(passportOptions),
+    JwtModule.registerAsync(jwtOptions),
   ],
   providers: [
     GameService,
@@ -24,11 +35,14 @@ import { AuthService } from 'src/common/services/auth.service';
     JoinService,
     JwtService,
     AuthService,
-    FilesService
+    FilesService,
+    JwtStrategy
   ],
   exports: [
     GameModule,
     TypeOrmModule,
+    JwtModule,
+    PassportModule,
     JwtModule
   ]
 })

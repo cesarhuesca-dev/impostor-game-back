@@ -12,19 +12,28 @@ export class Player {
   name: string;
 
   @Column({type:'bool', default: false})
+  host: boolean;
+
+  @Column({type:'bool', default: false})
   avatarImg: boolean;
 
   @ManyToOne(() => Game, game => game.player, { eager: true, cascade: true })
   game: Game
 
-  static toPlain(player: Player) : PlayerDto {
+  static toPlain(player: Player, gameInfo: boolean = true) : PlayerDto {
 
-    return {
+    let obj : PlayerDto = {
       id: player.id,
       name: player.name,
-      avatarImg: player.avatarImg,
-      game: Game.toPlain(player.game)
+      host: player.host,
+      avatarImg: player.avatarImg
     };
+
+    if(gameInfo){
+      obj.game = Game.toPlain(player.game);
+    }
+
+    return obj;
 
   }
 

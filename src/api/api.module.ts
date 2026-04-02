@@ -5,7 +5,7 @@ import { UtilsModule } from './utils/utils.module';
 @Module({
   imports: [
     GameModule,
-    UtilsModule
+    UtilsModule,
   ],
   providers: [],
   exports : []

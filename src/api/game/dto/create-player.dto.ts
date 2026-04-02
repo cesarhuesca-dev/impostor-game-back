@@ -17,4 +17,8 @@ export class CreatePlayerDto {
   @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', { property: 'name' }) })
   name: string;
 
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean', { property: 'host' }) })
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', { property: 'host' }) })
+  host: boolean;
+
 }

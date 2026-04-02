@@ -21,7 +21,7 @@ export class AuthService {
       playerId
     };
 
-    return this.jwtService.sign(payload, {secret : this.configService.get('JWT_SECRET')});
+    return this.jwtService.sign(payload, {secret : this.configService.get('JWT_SECRET'), expiresIn: '2h'});
   }
 
   verifyJwtToken(token: string) : JwtPayloadInterface | null {

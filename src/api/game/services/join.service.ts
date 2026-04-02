@@ -32,7 +32,7 @@ export class JoinService {
 
     try {
       
-      const { roomName, roomPassword, playerName } = createJoinGameDto;
+      const { roomName, roomPassword, playerName, host } = createJoinGameDto;
 
       const verified = await this.gameService.verifyJoinGame(roomName, roomPassword);
 
@@ -46,7 +46,7 @@ export class JoinService {
         throw new NotFoundException(this.i18n.t('entities.game.notFound'));
       }
 
-      const player =  await this.playerService.createPlayer(playerName, game.id);
+      const player =  await this.playerService.createPlayer(playerName, game.id, host);
 
       await this.gameService.update(game.id, { roomPlayersJoined: (game.roomPlayersJoined + 1) });
 
