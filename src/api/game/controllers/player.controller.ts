@@ -47,7 +47,7 @@ export class GamePlayerController {
   @Delete('/:id')
   async deletePlayer(@Param('id', ParseUUIDPipe) id: string) {
 
-    const result = await this.userService.remove(id);
+    const result = await this.userService.deletePlayer(id);
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 

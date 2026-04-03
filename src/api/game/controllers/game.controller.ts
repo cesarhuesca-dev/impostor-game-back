@@ -36,22 +36,22 @@ export class GameController {
   }
 
   @Post('/')
-  async create(@Body() createGameDto: CreateGameDto) {
-    const result = await this.gameService.create(createGameDto);
+  async createGame(@Body() createGameDto: CreateGameDto) {
+    const result = await this.gameService.createGame(createGameDto);
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
   @Auth()
   @Patch('/:id')
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateGameDto: UpdateGameDto) {
-    const result = await this.gameService.update(id, updateGameDto)
+  async updateGame(@Param('id', ParseUUIDPipe) id: string, @Body() updateGameDto: UpdateGameDto) {
+    const result = await this.gameService.updateGame(id, updateGameDto)
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
   @Auth()
   @Delete('/:id')
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    const result = await this.gameService.remove(id);
+  async deleteGame(@Param('id', ParseUUIDPipe) id: string) {
+    const result = await this.gameService.deleteGame(id);
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 

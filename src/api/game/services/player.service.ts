@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ExceptionBuilder } from 'src/core/utils/exception';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
 import { FilesService } from 'src/common/services/files.service';
 import { Game, Player } from '../entities';
 import { UpdatePlayerDto } from '../dto';
+import { GameService } from './game.service';
 
 @Injectable()
 export class PlayerService {
@@ -16,7 +17,8 @@ export class PlayerService {
     @InjectRepository(Player) private readonly playerRepository : Repository<Player>,
     @InjectRepository(Game) private readonly gameRepository : Repository<Game>,
     private readonly i18n: I18nService<I18nTranslations>,
-    private readonly filesService: FilesService
+    private readonly filesService: FilesService,
+    private readonly gameService: GameService
   ) {}
 
   
@@ -78,7 +80,7 @@ export class PlayerService {
 
   }
 
-  async update(id: string, updateGameDto: UpdatePlayerDto): Promise<Player> {
+  async updatePlayer(id: string, updateGameDto: UpdatePlayerDto): Promise<Player> {
       try {
         const player = await this.findOne(id);
   
@@ -101,10 +103,30 @@ export class PlayerService {
       }
     }
 
-  async remove(id: string): Promise<boolean> {
+  async deletePlayer(id: string): Promise<boolean> {
     try {
-      await this.findOne(id);
-      const result = await this.playerRepository.delete(id);
+      const player = await this.findOne(id);
+      
+      if(!player){
+        throw new NotFoundException(this.i18n.t('entities.player.notFound'));
+      }
+
+      const idGame = player.game.id;
+      const roomPlayersJoined = player.game.roomPlayersJoined - 1;
+      let result: DeleteResult;
+
+      if(player.host){
+        //Si es host hay que eliminar a todos lo jugadores y el juego
+        result = await this.playerRepository.delete({game : { id: idGame }});
+        await this.gameService.deleteGame(idGame);
+        this.filesService.deleteGameImages(idGame)
+      }else{
+        //Si no es host solo hay que eliminar 1 y actualizar el juego
+        await this.gameService.updateGame(idGame, { roomPlayersJoined });
+        result = await this.playerRepository.delete(id);
+        this.filesService.deleteImage(player.id, idGame)
+      }
+
       return (result && result.affected && result.affected > 0) ? true : false;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'PlayerService');
@@ -141,7 +163,7 @@ export class PlayerService {
       const result = await this.filesService.savePlayerImage(player.game.id, player.id, mimetype, buffer);
 
       if(result){
-        await this.update(player.id, {avatarImg : true});
+        await this.updatePlayer(player.id, {avatarImg : true});
       }
 
       return result

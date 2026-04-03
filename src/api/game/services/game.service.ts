@@ -35,7 +35,7 @@ export class GameService {
     }
   }
 
-  async create(createGameDto: CreateGameDto): Promise<Game> {
+  async createGame(createGameDto: CreateGameDto): Promise<Game> {
     try {
       const salt = await bcrypt.genSalt();
 
@@ -58,7 +58,7 @@ export class GameService {
     }
   }
 
-  async update(id: string, updateGameDto: UpdateGameDto): Promise<Game> {
+  async updateGame(id: string, updateGameDto: UpdateGameDto): Promise<Game> {
     try {
       const game = await this.findOne(id);
 
@@ -85,7 +85,7 @@ export class GameService {
     }
   }
 
-  async remove(id: string): Promise<boolean> {
+  async deleteGame(id: string): Promise<boolean> {
     try {
       await this.findOne(id);
       await this.gameRepository.delete(id);

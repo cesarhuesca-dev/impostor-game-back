@@ -48,7 +48,7 @@ export class JoinService {
 
       const player =  await this.playerService.createPlayer(playerName, game.id, host);
 
-      await this.gameService.update(game.id, { roomPlayersJoined: (game.roomPlayersJoined + 1) });
+      await this.gameService.updateGame(game.id, { roomPlayersJoined: (game.roomPlayersJoined + 1) });
 
       return {
         player: Player.toPlain(player),

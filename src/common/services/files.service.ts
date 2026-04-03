@@ -65,6 +65,42 @@ export class FilesService {
     }
   }
 
+  deleteImage(idPlayer: string, idGame: string): boolean {
+    try {
+      const i18n = I18nContext.current<I18nTranslations>();
+      const path = join(`${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}/${idPlayer}.webp`)
+
+      if(!existsSync(path)){
+        throw new BadRequestException(i18n?.t('validation.fileValidation'));
+      }
+
+      fs.rmSync(path);
+
+      return true;
+
+    } catch (error) {
+      return false;
+    }
+  }
+
+  deleteGameImages(idGame: string){
+    try {
+      const i18n = I18nContext.current<I18nTranslations>();
+      const path = join(`${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}`)
+
+      if(!existsSync(path)){
+        throw new BadRequestException(i18n?.t('validation.fileValidation'));
+      }
+
+      fs.rmdirSync(path, {recursive : true});
+
+      return true;
+
+    } catch (error) {
+      return false;
+    }
+  }
+
   
 
 }
