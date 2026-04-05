@@ -53,7 +53,7 @@ export class GamePlayerController {
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 
-    this.gameSocketService.updatePlayersList(payload.gameId)
+    this.gameSocketService.emitGameStatus(payload.gameId);
     return ResponseBuilder.buildSuccess();
   }
 

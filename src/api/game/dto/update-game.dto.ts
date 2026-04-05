@@ -19,14 +19,14 @@ export class UpdateGameDto extends PartialType(CreateGameDto) {
 
   @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
   @IsOptional()
-  isShowingWord?: boolean;
+  showingWord?: boolean;
   
   @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
   @IsOptional()
-  isShowingImpostor?: boolean;
+  showingImpostor?: boolean;
 
   @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
   @IsOptional()
-  isGameStarted?: boolean;
+  gameStarted?: boolean;
 
 }

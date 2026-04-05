@@ -31,11 +31,11 @@ export class GameSocketGateway implements  OnGatewayInit, OnGatewayConnection, O
       const { gameId, playerId } = tokenResult;
 
       client.join(gameId);
-      this.gameSocketService.registerClient( gameId, playerId, client);
-      await this.gameSocketService.updatePlayersList(gameId);
+      this.gameSocketService.registerClient(gameId, playerId, client);
+      await this.gameSocketService.emitGameStatus(gameId);
       
     } catch (error) {
-      client.disconnect()
+      client.disconnect();
     }
   }
 

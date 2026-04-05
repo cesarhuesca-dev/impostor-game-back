@@ -90,7 +90,7 @@ export class GameSocketService {
     const player = this.existPlayer(this.rooms[room], idPlayer)
 
     if(!player){
-      throw new Error(i18n?.t('entities.player.notFound'))
+      throw new Error(i18n?.t('entities.player.notFound'));
     }
 
     player.socket.disconnect();
@@ -113,14 +113,25 @@ export class GameSocketService {
     return clients;
   }
 
-  async updatePlayersList(idGame: string){
-    const game = await this.gameService.findOne(idGame);
-    const players = await this.playerService.findPlayersByGame(idGame);
+  async emitGameStatus(idGame: string){
+    try {
+      const i18n = I18nContext.current<I18nTranslations>();
 
-    this.emitToRoom(
-      idGame,
-      GameSocketTopic.PLAYER_MESSAGE,
-      SocketResponseBuilder.build(GameSocketTopic.CLIENTS_LIST_UPDATED, Game.toPlain(game!, players))
-    );
+      const game = await this.gameService.findOne(idGame);
+      
+      if(!game){
+        throw new Error(i18n?.t('entities.game.notFound'));
+      }
+      
+      const players = await this.playerService.findPlayersByGame(idGame);
+
+      this.emitToRoom(
+        idGame,
+        GameSocketTopic.PLAYER_MESSAGE,
+        SocketResponseBuilder.build(GameSocketTopic.UPDATE_GAME_STATUS, Game.toPlain(game!, players))
+      );
+    } catch {
+
+    }
   }
 }

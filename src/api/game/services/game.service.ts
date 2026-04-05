@@ -58,6 +58,15 @@ export class GameService {
     }
   }
 
+  async startGame(gameId: string): Promise<boolean>{
+    try {
+      await this.updateGame(gameId, { gameStarted: true });
+      return true;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
+
   async updateGame(id: string, updateGameDto: UpdateGameDto): Promise<Game> {
     try {
       const game = await this.findOne(id);

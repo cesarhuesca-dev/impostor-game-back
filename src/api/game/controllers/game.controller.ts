@@ -6,13 +6,17 @@ import { Game, Player } from '../entities';
 import { I18nService } from 'nestjs-i18n';
 import { GameService, PlayerService } from '../services';
 import { Auth } from 'src/common/decorators/auth.decorator';
+import { GetRequestJwtPayload } from 'src/common/decorators/get-request-jwt-payload.decorator';
+import { GameSocketService } from 'src/websockets/game/game-socket.service';
+import type { JwtPayloadInterface } from 'src/core/interface/jwt.interface';
 
 @Controller('game')
 export class GameController {
   constructor(
     private readonly gameService: GameService,
     private readonly playerService: PlayerService,
-    private readonly i18n: I18nService<I18nTranslations>
+    private readonly i18n: I18nService<I18nTranslations>,
+    private readonly socketService : GameSocketService
   ) {}
 
   //#region GAME REGION
@@ -39,6 +43,20 @@ export class GameController {
   async createGame(@Body() createGameDto: CreateGameDto) {
     const result = await this.gameService.createGame(createGameDto);
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
+  }
+
+  @Auth()
+  @Post('/start')
+  async startGame(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
+
+    const { gameId } = payload;
+
+    const result = await this.gameService.startGame(gameId);
+    
+    if(!result) return ResponseBuilder.buildNotSuccess();
+
+    this.socketService.emitGameStatus(gameId);
+    return ResponseBuilder.buildSuccess();
   }
 
   @Auth()
