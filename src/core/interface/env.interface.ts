@@ -7,6 +7,7 @@ export interface EnvInterface {
   DB_PORT: number;
   DB_HOST: string;
   HOST_API: string;
+  HOST_FRONT: string;
   SERVER_PORT: number;
   JWT_SECRET: string;
 }

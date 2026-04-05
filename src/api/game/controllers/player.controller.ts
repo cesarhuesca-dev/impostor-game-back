@@ -9,11 +9,13 @@ import { Player } from '../entities';
 import { GetRequestJwtPayload } from 'src/common/decorators/get-request-jwt-payload.decorator';
 import type { JwtPayloadInterface } from 'src/core/interface/jwt.interface';
 import { Auth } from 'src/common/decorators/auth.decorator';
+import { GameSocketService } from 'src/websockets/game/game-socket.service';
 
 @Controller('/game/player')
 export class GamePlayerController {
   constructor(
     private readonly userService: PlayerService, 
+    private readonly gameSocketService: GameSocketService, 
     private readonly i18n: I18nService<I18nTranslations>
   ) {}
 
@@ -45,12 +47,13 @@ export class GamePlayerController {
 
   @Auth()
   @Delete('/:id')
-  async deletePlayer(@Param('id', ParseUUIDPipe) id: string) {
+  async deletePlayer(@Param('id', ParseUUIDPipe) id: string, @GetRequestJwtPayload() payload: JwtPayloadInterface) {
 
     const result = await this.userService.deletePlayer(id);
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 
+    this.gameSocketService.updatePlayersList(payload.gameId)
     return ResponseBuilder.buildSuccess();
   }
 

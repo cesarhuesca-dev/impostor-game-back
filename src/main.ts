@@ -25,7 +25,7 @@ async function bootstrap(): Promise<void> {
       transform: true
     })
   );
-  app.enableCors()
+  app.enableCors({origin: env.HOST_API})
 
   await app.listen(env.SERVER_PORT);
   logger.log(`Server running on port ${env.SERVER_PORT}`);

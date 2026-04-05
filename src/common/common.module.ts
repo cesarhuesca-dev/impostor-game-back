@@ -10,6 +10,9 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
     FilesService,
     JwtService
   ],
-  exports : [CommonModule]
+  exports : [
+    CommonModule,
+    JwtModule
+  ]
 })
 export class CommonModule {}
