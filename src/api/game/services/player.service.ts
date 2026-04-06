@@ -119,12 +119,12 @@ export class PlayerService {
         //Si es host hay que eliminar a todos lo jugadores y el juego
         result = await this.playerRepository.delete({game : { id: idGame }});
         await this.gameService.deleteGame(idGame);
-        this.filesService.deleteGameImages(idGame)
+        this.filesService.deleteGameImages(idGame);
       }else{
         //Si no es host solo hay que eliminar 1 y actualizar el juego
         await this.gameService.updateGame(idGame, { roomPlayersJoined });
         result = await this.playerRepository.delete(id);
-        this.filesService.deleteImage(player.id, idGame)
+        this.filesService.deleteImage(player.id, idGame);
       }
 
       return (result && result.affected && result.affected > 0) ? true : false;

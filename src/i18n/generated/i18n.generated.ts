@@ -11,6 +11,7 @@ export type I18nTranslations = {
             "invalidInputs": string;
             "alreadyExist": string;
             "fullGameRoom": string;
+            "notStarted": string;
         };
         "player": {
             "notFound": string;

@@ -6,6 +6,7 @@ export interface PlayerDto {
   name: string;
   host: boolean;
   avatarImg: boolean;
+  impostor: boolean;
   
   game?: GameDto
 

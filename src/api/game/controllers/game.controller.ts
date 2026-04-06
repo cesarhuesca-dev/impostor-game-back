@@ -60,6 +60,34 @@ export class GameController {
   }
 
   @Auth()
+  @Post('/end')
+  async endGame(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
+
+    const { gameId } = payload;
+
+    const result = await this.gameService.endGame(gameId);
+    
+    if(!result) return ResponseBuilder.buildNotSuccess();
+
+    this.socketService.emitGameStatus(gameId);
+    return ResponseBuilder.buildSuccess();
+  }
+
+  @Auth()
+  @Post('/round')
+  async nextRound(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
+
+    const { gameId } = payload;
+
+    const result = await this.gameService.newRound(gameId);
+    
+    if(!result) return ResponseBuilder.buildNotSuccess();
+
+    this.socketService.emitGameStatus(gameId);
+    return ResponseBuilder.buildSuccess();
+  }
+
+  @Auth()
   @Patch('/:id')
   async updateGame(@Param('id', ParseUUIDPipe) id: string, @Body() updateGameDto: UpdateGameDto) {
     const result = await this.gameService.updateGame(id, updateGameDto)
@@ -73,6 +101,7 @@ export class GameController {
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 
+    this.socketService.emitCloseGame(id);
     return ResponseBuilder.buildSuccess();
   }
 

@@ -8,6 +8,7 @@ import { ExceptionBuilder } from 'src/core/utils/exception';
 import { CreateGameDto, UpdateGameDto } from '../dto';
 import { Game } from '../entities';
 import * as bcrypt from 'bcrypt';
+import { FilesService } from 'src/common/services/files.service';
 
 
 @Injectable()
@@ -15,8 +16,11 @@ export class GameService {
 
   constructor(
     private readonly i18n: I18nService<I18nTranslations>,
-    @InjectRepository(Game) private readonly gameRepository: Repository<Game>
+    @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
+    private readonly filesService: FilesService,
   ) {}
+
+  //#region CRUD METHODS
 
   async findOne(term: string): Promise<Game | null> {
     try {
@@ -58,15 +62,6 @@ export class GameService {
     }
   }
 
-  async startGame(gameId: string): Promise<boolean>{
-    try {
-      await this.updateGame(gameId, { gameStarted: true });
-      return true;
-    } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
-    }
-  }
-
   async updateGame(id: string, updateGameDto: UpdateGameDto): Promise<Game> {
     try {
       const game = await this.findOne(id);
@@ -98,14 +93,16 @@ export class GameService {
     try {
       await this.findOne(id);
       await this.gameRepository.delete(id);
+      this.filesService.deleteGameImages(id);
       return true;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async verifyJoinGame(roomName: string, roomPassword: string): Promise<boolean> {
+  //#endregion
 
+  async verifyJoinGame(roomName: string, roomPassword: string): Promise<boolean> {
     try {
     
       const game = await this.findOne(roomName);
@@ -125,4 +122,52 @@ export class GameService {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
+
+  
+
+  async startGame(gameId: string): Promise<boolean>{
+    try {
+      await this.updateGame(gameId, { gameStarted: true });
+      return true;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
+
+  async endGame(gameId: string): Promise<boolean>{
+    try {
+      await this.updateGame(gameId, { gameStarted: false, round: 0 });
+      return true;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
+
+  async newRound(gameId: string){
+    try {
+
+      const game = await this.findOne(gameId);
+
+      if (!game) {
+        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      }
+
+      if(!game.gameStarted){
+        throw new BadRequestException(this.i18n.t('entities.game.notStarted'));
+      }
+
+      //!TODO METER LA PALABRA NUEVA
+
+      await this.updateGame(gameId, { round: game.round + 1 });
+      return true;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
+
+  
+
+  
+
+  
 }

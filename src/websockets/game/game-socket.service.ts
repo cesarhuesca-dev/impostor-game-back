@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { JwtPayloadInterface } from 'src/core/interface/jwt.interface';
-import { DefaultEventsMap, Server, Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { GameSocketTopic } from '../enums/game-topics.enum';
@@ -129,6 +128,30 @@ export class GameSocketService {
         idGame,
         GameSocketTopic.PLAYER_MESSAGE,
         SocketResponseBuilder.build(GameSocketTopic.UPDATE_GAME_STATUS, Game.toPlain(game!, players))
+      );
+    } catch {
+
+    }
+  }
+
+  async emitPlayerBanned(idGame:string, idPlayer: string){
+    try {      
+      this.emitToRoom(
+        idGame,
+        GameSocketTopic.PLAYER_MESSAGE,
+        SocketResponseBuilder.build(GameSocketTopic.PLAYER_ELIMINATED, idPlayer )
+      );
+    } catch {
+
+    }
+  }
+
+  async emitCloseGame(idGame:string){
+    try {      
+      this.emitToRoom(
+        idGame,
+        GameSocketTopic.PLAYER_MESSAGE,
+        SocketResponseBuilder.build(GameSocketTopic.CLOSE_GAME)
       );
     } catch {
 

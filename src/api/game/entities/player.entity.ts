@@ -17,7 +17,10 @@ export class Player {
   @Column({type:'bool', default: false})
   avatarImg: boolean;
 
-  @ManyToOne(() => Game, game => game.player, { eager: true, cascade: true })
+  @Column({type:'bool', default: false})
+  impostor: boolean;
+
+  @ManyToOne(() => Game, game => game.player, { eager: true, cascade: true, onDelete: 'CASCADE' })
   game: Game
 
   static toPlain(player: Player, gameInfo: boolean = true) : PlayerDto {
@@ -26,7 +29,8 @@ export class Player {
       id: player.id,
       name: player.name,
       host: player.host,
-      avatarImg: player.avatarImg
+      avatarImg: player.avatarImg,
+      impostor: player.impostor
     };
 
     if(gameInfo){

@@ -54,6 +54,7 @@ export class GamePlayerController {
     if(!result) return ResponseBuilder.buildNotSuccess();
 
     this.gameSocketService.emitGameStatus(payload.gameId);
+    this.gameSocketService.emitPlayerBanned(payload.gameId, id);
     return ResponseBuilder.buildSuccess();
   }
 

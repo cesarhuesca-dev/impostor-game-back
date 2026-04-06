@@ -3,7 +3,8 @@
     "notFound" : "Game room not found",
     "invalidInputs" : "Invalid inputs",
     "alreadyExist" : "Game already exist",
-    "fullGameRoom" : "The room game is full"
+    "fullGameRoom" : "The room game is full",
+    "notStarted" : "The game not started"
   },
   "player" : {
     "notFound" : "Player not found",
