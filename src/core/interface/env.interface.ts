@@ -10,6 +10,7 @@ export interface EnvInterface {
   HOST_FRONT: string;
   SERVER_PORT: number;
   JWT_SECRET: string;
+  WORD_API: string;
 }
 
 export enum EnvironmentMode {

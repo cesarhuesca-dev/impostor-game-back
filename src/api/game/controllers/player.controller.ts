@@ -3,18 +3,18 @@ import { ResponseBuilder } from 'src/core/utils/response';
 import { I18nContext, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PlayerService } from '../services';
 import { PlayerDto } from '../dto';
 import { Player } from '../entities';
-import { GetRequestJwtPayload } from 'src/common/decorators/get-request-jwt-payload.decorator';
+import { GetRequestJwtPayload } from 'src/core/decorators/get-request-jwt-payload.decorator';
 import type { JwtPayloadInterface } from 'src/core/interface/jwt.interface';
-import { Auth } from 'src/common/decorators/auth.decorator';
+import { Auth } from 'src/core/decorators/auth.decorator';
 import { GameSocketService } from 'src/websockets/game/game-socket.service';
+import { PlayerService } from '../services/player.service';
 
 @Controller('/game/player')
 export class GamePlayerController {
   constructor(
-    private readonly userService: PlayerService, 
+    private readonly playerService: PlayerService, 
     private readonly gameSocketService: GameSocketService, 
     private readonly i18n: I18nService<I18nTranslations>
   ) {}
@@ -23,7 +23,7 @@ export class GamePlayerController {
   @Get('/token')
   async getPlayerByToken(@GetRequestJwtPayload() payload: JwtPayloadInterface ) {
     
-    const result = await this.userService.findOne(payload.playerId);
+    const result = await this.playerService.findOne(payload.playerId);
 
     if(!result){
       throw new NotFoundException(this.i18n.t('entities.player.notFound'));
@@ -36,7 +36,7 @@ export class GamePlayerController {
   @Get('/:id')
   async getPlayer(@Param('id', ParseUUIDPipe) id: string) {
     
-    const result = await this.userService.findOne(id);
+    const result = await this.playerService.findOne(id);
 
     if(!result){
       throw new NotFoundException(this.i18n.t('entities.player.notFound'));
@@ -49,18 +49,24 @@ export class GamePlayerController {
   @Delete('/:id')
   async deletePlayer(@Param('id', ParseUUIDPipe) id: string, @GetRequestJwtPayload() payload: JwtPayloadInterface) {
 
-    const result = await this.userService.deletePlayer(id);
+    const result = await this.playerService.deletePlayer(id);
 
     if(!result) return ResponseBuilder.buildNotSuccess();
 
     this.gameSocketService.emitGameStatus(payload.gameId);
-    this.gameSocketService.emitPlayerBanned(payload.gameId, id);
+
+    if(id === payload.playerId){
+      this.gameSocketService.emitCloseGame(payload.gameId);
+    }else{
+      this.gameSocketService.emitPlayerBanned(payload.gameId, id);
+    }
+
     return ResponseBuilder.buildSuccess();
   }
 
   @Get('/image/:id')
   async getPlayerImage(@Res() res, @Param('id', ParseUUIDPipe) id: string) {
-    const result = await this.userService.getImage(id);
+    const result = await this.playerService.getImage(id);
     if(!result) return res.status(400).json(ResponseBuilder.buildNotSuccess());
     return res.sendFile(result);
   }
@@ -88,7 +94,7 @@ export class GamePlayerController {
     ) file: Express.Multer.File,
     @Param('id', ParseUUIDPipe) id: string
   ) {
-    const result = await this.userService.uploadImage(id, file);
+    const result = await this.playerService.uploadImage(id, file);
     if(!result) return ResponseBuilder.buildNotSuccess();
     return ResponseBuilder.buildSuccess();
   }

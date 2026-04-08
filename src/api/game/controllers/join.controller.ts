@@ -2,7 +2,7 @@ import { ResponseBuilder } from 'src/core/utils/response';
 import { JoinDto } from '../dto/join.dto';
 import { Controller, Post, Body } from '@nestjs/common';
 import { VerifyGameDto, CreateJoinGameDto } from '../dto';
-import { JoinService } from '../services';
+import { JoinService } from '../services/join.service';
 
 @Controller('/game/join')
 export class GameJoinController {

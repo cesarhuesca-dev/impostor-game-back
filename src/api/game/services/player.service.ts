@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ExceptionBuilder } from 'src/core/utils/exception';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
@@ -18,7 +18,7 @@ export class PlayerService {
     @InjectRepository(Game) private readonly gameRepository : Repository<Game>,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly filesService: FilesService,
-    private readonly gameService: GameService
+    @Inject(forwardRef(() => GameService)) private readonly gameService: GameService
   ) {}
 
   
@@ -170,5 +170,33 @@ export class PlayerService {
     } catch (error) {
       ExceptionBuilder.handleException(error, 'PlayerService');
     }
+  }
+
+  async newRoundImpostor(gameId: string) : Promise<boolean>{
+      
+    try {
+
+      const players = await this.findPlayersByGame(gameId);
+
+      if(!players || players.length <= 0 ){
+       throw new NotFoundException(this.i18n.t('entities.player.notFound'));
+      }
+
+      const numPlayers = players.length;
+      const indexPlayerImpostor = Math.floor(Math.random() * ((numPlayers - 1) - 0 + 1) + 0);
+
+      const playerUpdated = players.map((player, index) => ({
+        ...player,
+        impostor: (index === indexPlayerImpostor) ? true : false,
+        id: player.id
+      }));
+      
+      await this.playerRepository.save(playerUpdated);
+
+      return true;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'PlayerService');
+    }
+
   }
 }

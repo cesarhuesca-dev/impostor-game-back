@@ -4,11 +4,12 @@ import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { GameDto, CreateGameDto, UpdateGameDto } from '../dto';
 import { Game, Player } from '../entities';
 import { I18nService } from 'nestjs-i18n';
-import { GameService, PlayerService } from '../services';
-import { Auth } from 'src/common/decorators/auth.decorator';
-import { GetRequestJwtPayload } from 'src/common/decorators/get-request-jwt-payload.decorator';
+import { Auth } from 'src/core/decorators/auth.decorator';
+import { GetRequestJwtPayload } from 'src/core/decorators/get-request-jwt-payload.decorator';
 import { GameSocketService } from 'src/websockets/game/game-socket.service';
 import type { JwtPayloadInterface } from 'src/core/interface/jwt.interface';
+import { GameService } from '../services/game.service';
+import { PlayerService } from '../services/player.service';
 
 @Controller('game')
 export class GameController {
@@ -56,7 +57,7 @@ export class GameController {
     if(!result) return ResponseBuilder.buildNotSuccess();
 
     this.socketService.emitGameStatus(gameId);
-    return ResponseBuilder.buildSuccess();
+    return ResponseBuilder.build(result);
   }
 
   @Auth()
@@ -77,14 +78,28 @@ export class GameController {
   @Post('/round')
   async nextRound(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
 
-    const { gameId } = payload;
+    const { gameId, playerId } = payload;
 
-    const result = await this.gameService.newRound(gameId);
+    const resultWord = await this.gameService.newRound(gameId);
     
-    if(!result) return ResponseBuilder.buildNotSuccess();
+    if(!resultWord) return ResponseBuilder.buildNotSuccess();
 
     this.socketService.emitGameStatus(gameId);
-    return ResponseBuilder.buildSuccess();
+    return ResponseBuilder.build(resultWord);
+  }
+
+  @Auth()
+  @Post('/word')
+  async changeWord(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
+
+    const { gameId, playerId } = payload;
+
+    const resultWord = await this.gameService.changeWord(gameId);
+    
+    if(!resultWord) return ResponseBuilder.buildNotSuccess();
+
+    this.socketService.emitGameStatus(gameId);
+    return ResponseBuilder.build(resultWord);
   }
 
   @Auth()

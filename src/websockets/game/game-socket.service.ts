@@ -3,9 +3,10 @@ import { Server, Socket } from 'socket.io';
 import { I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { GameSocketTopic } from '../enums/game-topics.enum';
-import { Game } from 'src/api/game/entities';
-import { GameService, PlayerService } from 'src/api/game/services';
+import { Game, Player } from 'src/api/game/entities';
 import { SocketResponseBuilder } from 'src/core/utils/socket-response';
+import { GameService } from 'src/api/game/services/game.service';
+import { PlayerService } from 'src/api/game/services/player.service';
 
 interface ConnectedRooms {
   [id: string]: ConnectedClients[]
@@ -127,7 +128,33 @@ export class GameSocketService {
       this.emitToRoom(
         idGame,
         GameSocketTopic.PLAYER_MESSAGE,
-        SocketResponseBuilder.build(GameSocketTopic.UPDATE_GAME_STATUS, Game.toPlain(game!, players))
+        SocketResponseBuilder.build(
+          GameSocketTopic.UPDATE_GAME_STATUS,
+          Game.toPlain(game!, players.map(x =>Player.toPlain(x, false)))
+        )
+      );
+    } catch {
+
+    }
+  }
+
+  async emitPlayerStatus(playerId: string) {
+    try {
+      const i18n = I18nContext.current<I18nTranslations>();
+
+      const player = await this.playerService.findOne(playerId);
+      
+      if(!player){
+        throw new Error(i18n?.t('entities.player.notFound'));
+      }
+    
+      this.emitToRoom(
+        player.game.id,
+        GameSocketTopic.PLAYER_MESSAGE,
+        SocketResponseBuilder.build(
+          GameSocketTopic.UPDATE_PLAYER_STATUS,
+          Player.toPlain(player)
+        )
       );
     } catch {
 

@@ -1,10 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { CreateGameDto } from './create-game.dto';
 import { IsString, MinLength, IsNotEmpty, IsNumber, IsInt, IsOptional, IsPositive, IsBoolean } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 
-export class UpdateGameDto extends PartialType(CreateGameDto) {
+export class UpdateGameDto extends PartialType(
+  OmitType(CreateGameDto, ['category'])
+) {
 
 
   @IsInt({ message: i18nValidationMessage<I18nTranslations>('validation.isInt')})
@@ -28,5 +30,8 @@ export class UpdateGameDto extends PartialType(CreateGameDto) {
   @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
   @IsOptional()
   gameStarted?: boolean;
+
+  word?: string | null;
+  category?: string | null;
 
 }

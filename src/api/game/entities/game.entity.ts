@@ -17,6 +17,9 @@ export class Game {
   @Column({ type: 'integer', default : 4 })
   roomPlayers: number;
 
+  @Column({ type: 'text', nullable: true })
+  word: string | null;
+
   @Column({ type: 'bool', default: false })
   customWords: boolean;
 
@@ -24,7 +27,7 @@ export class Game {
   specificCategory: boolean;
 
   @Column({ type: 'text', nullable: true })
-  category: string;
+  category: string | null;
 
   @Column({ type: 'boolean', default: false })
   multipleImpostors: boolean;
@@ -60,14 +63,15 @@ export class Game {
       roomPlayers: game.roomPlayers,
       customWords: game.customWords,
       specificCategory: game.specificCategory,
-      category: game.category,
+      category: (game.category) ? game.category : null,
       multipleImpostors: game.multipleImpostors,
       overlay: game.overlay,
       gameStarted: game.gameStarted,
       showingImpostor: game.showingImpostor,
       showingWord: game.showingWord,
       round: game.round,
-      roomPlayersJoined: game.roomPlayersJoined
+      roomPlayersJoined: game.roomPlayersJoined,
+      word: (game.word) ? game.word : null
     };
 
     if(players){

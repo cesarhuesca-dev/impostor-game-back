@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { I18nService } from 'nestjs-i18n';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
@@ -9,15 +9,21 @@ import { CreateGameDto, UpdateGameDto } from '../dto';
 import { Game } from '../entities';
 import * as bcrypt from 'bcrypt';
 import { FilesService } from 'src/common/services/files.service';
+import { WordService } from 'src/common/services/word.service';
+import { LanguagesSupported } from 'src/core/enum/languages.enum';
+import { Word } from 'src/common/interfaces/word.interface';
+import { PlayerService } from './player.service';
 
 
 @Injectable()
 export class GameService {
 
   constructor(
-    private readonly i18n: I18nService<I18nTranslations>,
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
+    private readonly i18n: I18nService<I18nTranslations>,
     private readonly filesService: FilesService,
+    private readonly wordService: WordService,
+    @Inject(forwardRef(() => PlayerService)) private readonly playerService: PlayerService
   ) {}
 
   //#region CRUD METHODS
@@ -125,10 +131,10 @@ export class GameService {
 
   
 
-  async startGame(gameId: string): Promise<boolean>{
+  async startGame(gameId: string): Promise<Game>{
     try {
-      await this.updateGame(gameId, { gameStarted: true });
-      return true;
+      const game = await this.updateGame(gameId, { gameStarted: true });
+      return game;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
@@ -136,14 +142,14 @@ export class GameService {
 
   async endGame(gameId: string): Promise<boolean>{
     try {
-      await this.updateGame(gameId, { gameStarted: false, round: 0 });
+      await this.updateGame(gameId, { gameStarted: false, round: 0, category: null, word: null });
       return true;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async newRound(gameId: string){
+  async newRound(gameId: string): Promise<Word>{
     try {
 
       const game = await this.findOne(gameId);
@@ -156,16 +162,64 @@ export class GameService {
         throw new BadRequestException(this.i18n.t('entities.game.notStarted'));
       }
 
-      //!TODO METER LA PALABRA NUEVA
+      const i18nLang = I18nContext.current<I18nTranslations>()?.lang as LanguagesSupported ?? null;
 
-      await this.updateGame(gameId, { round: game.round + 1 });
-      return true;
+      if(!i18nLang){
+        throw new BadRequestException(this.i18n.t('exceptions.notAcceptable'));
+      }
+
+      const word = await this.wordService.getRandomWord(i18nLang);
+
+      if(!word){
+        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+      }
+
+      await this.updateGame(gameId, { round: game.round + 1, word: word.word, category: word.category });
+
+      const impostor = await this.playerService.newRoundImpostor(gameId);
+
+      if(!impostor) {
+        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+      }
+
+      return word;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  
+  async changeWord(gameId: string): Promise<Word>{
+    try {
+
+      const game = await this.findOne(gameId);
+
+      if (!game) {
+        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      }
+
+      if(!game.gameStarted){
+        throw new BadRequestException(this.i18n.t('entities.game.notStarted'));
+      }
+
+      const i18nLang = I18nContext.current<I18nTranslations>()?.lang as LanguagesSupported ?? null;
+
+      if(!i18nLang){
+        throw new BadRequestException(this.i18n.t('exceptions.notAcceptable'));
+      }
+
+      const word = await this.wordService.getRandomWord(i18nLang);
+
+      if(!word){
+        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+      }
+
+      await this.updateGame(gameId, { word: word.word, category: word.category });
+
+      return word;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
 
   
 

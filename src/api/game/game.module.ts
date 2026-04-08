@@ -12,9 +12,10 @@ import { AuthService } from 'src/common/services/auth.service';
 import { GameController } from './controllers/game.controller';
 import { GamePlayerController } from './controllers/player.controller';
 import { GameJoinController } from './controllers/join.controller';
-import { JwtStrategy } from '../../common/strategies/jwt-strategy';
+import { JwtStrategy } from '../../core/strategies/jwt-strategy';
 import { PassportModule } from '@nestjs/passport';
 import { jwtOptions, passportOptions } from 'src/core/config';
+import { WordService } from 'src/common/services/word.service';
 
 @Module({
   controllers: [
@@ -36,7 +37,8 @@ import { jwtOptions, passportOptions } from 'src/core/config';
     JwtService,
     AuthService,
     FilesService,
-    JwtStrategy
+    JwtStrategy,
+    WordService
   ],
   exports: [
     GameModule,

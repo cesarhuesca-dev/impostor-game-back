@@ -1,0 +1,17 @@
+export enum WordCategories {
+  all = 'all',
+  wordle = 'wordle',
+  brainrot = 'brainrot',
+  countries = 'countries',
+  capitals_of_countries = 'capitals_of_countries',
+  sports = 'sports',
+  animals = 'animals',
+  birds = 'birds',
+  softwares = 'softwares',
+  programming_languages = 'programming_languages',
+  games = 'games',
+  pc_games = 'pc_games',
+  mobile_games = 'mobile_games',
+  console_games = 'console_games',
+  companies = 'companies',
+}

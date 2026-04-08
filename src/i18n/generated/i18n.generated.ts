@@ -5,6 +5,23 @@
 import type { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
+    "categories": {
+        "all": string;
+        "wordle": string;
+        "brainrot": string;
+        "countries": string;
+        "capitals_of_countries": string;
+        "sports": string;
+        "animals": string;
+        "birds": string;
+        "softwares": string;
+        "programming_languages": string;
+        "games": string;
+        "pc_games": string;
+        "mobile_games": string;
+        "console_games": string;
+        "companies": string;
+    };
     "entities": {
         "game": {
             "notFound": string;

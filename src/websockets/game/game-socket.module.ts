@@ -4,8 +4,10 @@ import { CommonModule } from 'src/common/common.module';
 import { AuthService } from 'src/common/services/auth.service';
 import { GameSocketService } from './game-socket.service';
 import { GameModule } from 'src/api/game/game.module';
-import { GameService, PlayerService } from 'src/api/game/services';
 import { FilesService } from 'src/common/services/files.service';
+import { WordService } from 'src/common/services/word.service';
+import { PlayerService } from 'src/api/game/services/player.service';
+import { GameService } from 'src/api/game/services/game.service';
 
 @Global()
 @Module({
@@ -20,6 +22,7 @@ import { FilesService } from 'src/common/services/files.service';
     FilesService,
     GameService,
     PlayerService,
+    WordService
   ],
   exports : [
     GameSocketModule,

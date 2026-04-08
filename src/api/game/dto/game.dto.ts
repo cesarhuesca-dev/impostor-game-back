@@ -7,7 +7,7 @@ export interface GameDto {
   roomPlayers: number;
   customWords: boolean;
   specificCategory: boolean;
-  category: string;
+  category: string | null;
   multipleImpostors: boolean;
   overlay: boolean;
   gameStarted: boolean;
@@ -15,5 +15,6 @@ export interface GameDto {
   showingWord: boolean;
   roomPlayersJoined: number;
   round: number;
+  word: string | null;
   players?: PlayerDto[]
 }
