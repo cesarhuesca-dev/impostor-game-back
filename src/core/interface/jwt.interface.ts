@@ -1,6 +1,4 @@
 export interface JwtPayloadInterface {
-
   gameId: string;
-  playerId: string; 
-
+  playerId: string;
 }

@@ -16,16 +16,16 @@ async function bootstrap(): Promise<void> {
   app.useGlobalFilters(
     new CustomExceptionFilter(),
     new I18nValidationExceptionFilter({ detailedErrors: false }),
-    new I18nCustomValidationExceptionFilter()
+    new I18nCustomValidationExceptionFilter(),
   );
   app.useGlobalPipes(
     new I18nValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
-      transform: true
-    })
+      transform: true,
+    }),
   );
-  app.enableCors({origin: env.HOST_FRONT})
+  app.enableCors({ origin: env.HOST_FRONT });
 
   await app.listen(env.SERVER_PORT);
   logger.log(`Server running on port ${env.SERVER_PORT}`);

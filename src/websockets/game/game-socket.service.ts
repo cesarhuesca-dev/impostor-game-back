@@ -9,27 +9,23 @@ import { GameService } from 'src/api/game/services/game.service';
 import { PlayerService } from 'src/api/game/services/player.service';
 
 interface ConnectedRooms {
-  [id: string]: ConnectedClients[]
+  [id: string]: ConnectedClients[];
 }
 
 interface ConnectedClients {
-  socket : Socket,
-  idPlayer: string
+  socket: Socket;
+  idPlayer: string;
 }
-
 
 @Injectable()
 export class GameSocketService {
-
   private server!: Server;
-  private rooms : ConnectedRooms = {};
+  private rooms: ConnectedRooms = {};
 
   constructor(
     private readonly gameService: GameService,
     private readonly playerService: PlayerService,
-  ){
-    
-  }
+  ) {}
 
   setServer(server: Server) {
     this.server = server;
@@ -39,17 +35,15 @@ export class GameSocketService {
     this.server.to(room).emit(event, data);
   }
 
-  registerClient(idGame : string, idPlayer: string, client: Socket){
-
+  registerClient(idGame: string, idPlayer: string, client: Socket) {
     const i18n = I18nContext.current<I18nTranslations>();
-    
+
     const room = this.existRoom(idGame);
 
-    if(room){
-      
+    if (room) {
       const player = this.existPlayer(this.rooms[room], idPlayer);
 
-      if(player){
+      if (player) {
         throw new Error(i18n?.t('entities.player.notFound'));
       }
 
@@ -57,72 +51,70 @@ export class GameSocketService {
       return;
     }
 
-    
     this.createRoom(idGame);
     this.addClient(idGame, idPlayer, client);
   }
 
-  disconnectClient(idGame : string, idPlayer: string) {
+  disconnectClient(idGame: string, idPlayer: string) {
     this.removeClient(idGame, idPlayer);
   }
 
-  createRoom(idGame: string){
+  createRoom(idGame: string) {
     this.rooms[idGame] = [];
   }
 
-  addClient(idGame : string, idPlayer: string, socket: Socket){
+  addClient(idGame: string, idPlayer: string, socket: Socket) {
     this.rooms[idGame].push({
       idPlayer,
-      socket
+      socket,
     });
   }
 
-  removeClient(idGame : string, idPlayer: string){
-
+  removeClient(idGame: string, idPlayer: string) {
     const i18n = I18nContext.current<I18nTranslations>();
-    
+
     const room = this.existRoom(idGame);
 
-    if(!room){
-      throw new Error(i18n?.t('entities.player.notFound'))
+    if (!room) {
+      throw new Error(i18n?.t('entities.player.notFound'));
     }
 
-    const player = this.existPlayer(this.rooms[room], idPlayer)
+    const player = this.existPlayer(this.rooms[room], idPlayer);
 
-    if(!player){
+    if (!player) {
       throw new Error(i18n?.t('entities.player.notFound'));
     }
 
     player.socket.disconnect();
-    this.rooms[room] = this.rooms[room].filter(clients => clients.idPlayer !== idPlayer);
+    this.rooms[room] = this.rooms[room].filter((clients) => clients.idPlayer !== idPlayer);
   }
 
-  existRoom(idGame : string): string | null {
+  existRoom(idGame: string): string | null {
     const game = Object.keys(this.rooms).find((roomId) => idGame === roomId) ?? null;
     return game;
   }
 
-  existPlayer(room : ConnectedClients[], idPlayer: string): ConnectedClients | null{
-    const player = room.find(clients => clients.idPlayer === idPlayer) ?? null;
+  existPlayer(room: ConnectedClients[], idPlayer: string): ConnectedClients | null {
+    const player = room.find((clients) => clients.idPlayer === idPlayer) ?? null;
     return player;
   }
 
-  getRoomClients(gameId:string): string[] {
+  getRoomClients(gameId: string): string[] {
     const room = this.existRoom(gameId);
-    const clients = (room) ? this.rooms[room].map(x => x.idPlayer) : []
+    const clients = room ? this.rooms[room].map((x) => x.idPlayer) : [];
     return clients;
   }
 
-  async emitGameStatus(idGame: string){
+  async emitGameStatus(idGame: string) {
     try {
       const i18n = I18nContext.current<I18nTranslations>();
 
       const game = await this.gameService.findOne(idGame);
-      
-      if(!game){
+
+      if (!game) {
         throw new Error(i18n?.t('entities.game.notFound'));
       }
-      
+
       const players = await this.playerService.findPlayersByGame(idGame);
 
       this.emitToRoom(
@@ -130,11 +122,14 @@ export class GameSocketService {
         GameSocketTopic.PLAYER_MESSAGE,
         SocketResponseBuilder.build(
           GameSocketTopic.UPDATE_GAME_STATUS,
-          Game.toPlain(game!, players.map(x =>Player.toPlain(x, false)))
-        )
+          Game.toPlain(
+            game!,
+            players.map((x) => Player.toPlain(x, false)),
+          ),
+        ),
       );
     } catch {
-
+      /* empty */
     }
   }
 
@@ -143,45 +138,42 @@ export class GameSocketService {
       const i18n = I18nContext.current<I18nTranslations>();
 
       const player = await this.playerService.findOne(playerId);
-      
-      if(!player){
+
+      if (!player) {
         throw new Error(i18n?.t('entities.player.notFound'));
       }
-    
+
       this.emitToRoom(
         player.game.id,
         GameSocketTopic.PLAYER_MESSAGE,
-        SocketResponseBuilder.build(
-          GameSocketTopic.UPDATE_PLAYER_STATUS,
-          Player.toPlain(player)
-        )
+        SocketResponseBuilder.build(GameSocketTopic.UPDATE_PLAYER_STATUS, Player.toPlain(player)),
       );
     } catch {
-
+      /* empty */
     }
   }
 
-  async emitPlayerBanned(idGame:string, idPlayer: string){
-    try {      
+  async emitPlayerBanned(idGame: string, idPlayer: string) {
+    try {
       this.emitToRoom(
         idGame,
         GameSocketTopic.PLAYER_MESSAGE,
-        SocketResponseBuilder.build(GameSocketTopic.PLAYER_ELIMINATED, idPlayer )
+        SocketResponseBuilder.build(GameSocketTopic.PLAYER_ELIMINATED, idPlayer),
       );
     } catch {
-
+      /* empty */
     }
   }
 
-  async emitCloseGame(idGame:string){
-    try {      
+  async emitCloseGame(idGame: string) {
+    try {
       this.emitToRoom(
         idGame,
         GameSocketTopic.PLAYER_MESSAGE,
-        SocketResponseBuilder.build(GameSocketTopic.CLOSE_GAME)
+        SocketResponseBuilder.build(GameSocketTopic.CLOSE_GAME),
       );
     } catch {
-
+      /* empty */
     }
   }
 }

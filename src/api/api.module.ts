@@ -3,11 +3,8 @@ import { GameModule } from './game/game.module';
 import { UtilsModule } from './utils/utils.module';
 
 @Module({
-  imports: [
-    GameModule,
-    UtilsModule,
-  ],
+  imports: [GameModule, UtilsModule],
   providers: [],
-  exports : []
+  exports: [],
 })
 export class ApiModule {}

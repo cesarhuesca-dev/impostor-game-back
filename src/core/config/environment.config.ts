@@ -1,8 +1,9 @@
 import Joi from 'joi';
 import z from 'zod';
 
-import { EnvInterface, EnvironmentMode, SupportLanguages } from '../interface/env.interface';
+import { EnvInterface, EnvironmentMode } from '../interface/env.interface';
 import { ConfigModuleOptions } from '@nestjs/config';
+import { LanguagesSupported } from '../enum/languages.enum';
 
 const envValidationSchema = () => {
   return Joi.object({
@@ -11,7 +12,7 @@ const envValidationSchema = () => {
       .valid(...Object.values(EnvironmentMode)),
     FALLBACK_LANGUAGE: Joi.string()
       .required()
-      .valid(...Object.values(SupportLanguages)),
+      .valid(...Object.values(LanguagesSupported)),
 
     //DATABASE
     DB_USER: Joi.string().required(),
@@ -27,13 +28,13 @@ const envValidationSchema = () => {
     JWT_SECRET: Joi.string().required(),
 
     //WORD API
-    WORD_API: Joi.string().required()
+    WORD_API: Joi.string().required(),
   });
 };
 
 const envZodSchema = z.object({
   ENVIRONMENT: z.literal(Object.values(EnvironmentMode)),
-  FALLBACK_LANGUAGE: z.literal(Object.values(SupportLanguages)),
+  FALLBACK_LANGUAGE: z.literal(Object.values(LanguagesSupported)),
   //DATABASE
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
@@ -67,12 +68,12 @@ export const envs = (): EnvInterface => {
     HOST_API: parsed.HOST_API,
     HOST_FRONT: parsed.HOST_FRONT,
     JWT_SECRET: parsed.JWT_SECRET,
-    WORD_API: parsed.WORD_API
+    WORD_API: parsed.WORD_API,
   };
 };
 
 export const configOptions: ConfigModuleOptions = {
   validationSchema: envValidationSchema(),
   isGlobal: true,
-  load: [envs]
+  load: [envs],
 };

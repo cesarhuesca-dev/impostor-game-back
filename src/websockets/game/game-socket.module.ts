@@ -11,10 +11,7 @@ import { GameService } from 'src/api/game/services/game.service';
 
 @Global()
 @Module({
-  imports : [
-    CommonModule,
-    GameModule
-  ],
+  imports: [CommonModule, GameModule],
   providers: [
     GameSocketGateway,
     GameSocketService,
@@ -22,11 +19,8 @@ import { GameService } from 'src/api/game/services/game.service';
     FilesService,
     GameService,
     PlayerService,
-    WordService
+    WordService,
   ],
-  exports : [
-    GameSocketModule,
-    GameSocketService
-  ]
+  exports: [GameSocketModule, GameSocketService],
 })
 export class GameSocketModule {}

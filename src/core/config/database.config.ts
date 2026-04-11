@@ -11,12 +11,13 @@ const databaseSchema = (configService: ConfigService<EnvInterface>): TypeOrmModu
     username: configService.get('DB_USER'),
     password: configService.get('DB_PASSWORD'),
     synchronize: configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true,
-    autoLoadEntities: configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true
+    autoLoadEntities:
+      configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true,
   };
 };
 
 export const databaseOptions: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: (configService: ConfigService<EnvInterface>) => databaseSchema(configService)
+  useFactory: (configService: ConfigService<EnvInterface>) => databaseSchema(configService),
 };

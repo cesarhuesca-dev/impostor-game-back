@@ -7,30 +7,35 @@ import fs, { existsSync } from 'fs';
 
 @Injectable()
 export class FilesService {
-  
-  private readonly pathContentPlayersImage: string = 'content/games'
+  private readonly pathContentPlayersImage: string = 'content/games';
   private readonly allowedImageExtensions: string[] = ['png', 'jpg', 'jpeg', 'webp'];
 
-  getImage(idGame: string, idPlayer: string){
+  getImage(idGame: string, idPlayer: string) {
     try {
       const i18n = I18nContext.current<I18nTranslations>();
-      const path = join(`${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}/${idPlayer}.webp`)
+      const path = join(
+        `${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}/${idPlayer}.webp`,
+      );
 
-      if(!existsSync(path)){
+      if (!existsSync(path)) {
         throw new BadRequestException(i18n?.t('validation.fileValidation'));
       }
 
       return path;
-
-    } catch (error) {
+    } catch {
       return false;
     }
   }
-  
-  async savePlayerImage(idGame: string, idPlayer: string, mimetype: string, buffer: Buffer<ArrayBufferLike> ): Promise<boolean> {
+
+  async savePlayerImage(
+    idGame: string,
+    idPlayer: string,
+    mimetype: string,
+    buffer: Buffer<ArrayBufferLike>,
+  ): Promise<boolean> {
     try {
       const i18n = I18nContext.current<I18nTranslations>();
-      
+
       if (!idGame || !idPlayer || !buffer) {
         throw new BadRequestException(i18n?.t('validation.fileValidation'));
       }
@@ -46,11 +51,11 @@ export class FilesService {
       }
 
       const fileName: string = `${idPlayer}.webp`;
-      const path = join(`./${this.pathContentPlayersImage}/${idGame}`)
+      const path = join(`./${this.pathContentPlayersImage}/${idGame}`);
       const filePath: string = join(path, fileName);
       //Convierte el archivo a webp
       const webpBuffer: Buffer = await sharp(buffer).webp({ quality: 80 }).toBuffer();
-      
+
       // Crear directorio si no existe
       if (!fs.existsSync(path)) {
         fs.mkdirSync(path, { recursive: true });
@@ -60,7 +65,7 @@ export class FilesService {
       await fs.promises.writeFile(filePath, webpBuffer);
 
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -68,41 +73,36 @@ export class FilesService {
   deleteImage(idPlayer: string, idGame: string): boolean {
     try {
       const i18n = I18nContext.current<I18nTranslations>();
-      const path = join(`${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}/${idPlayer}.webp`)
+      const path = join(
+        `${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}/${idPlayer}.webp`,
+      );
 
-      if(!existsSync(path)){
+      if (!existsSync(path)) {
         throw new BadRequestException(i18n?.t('validation.fileValidation'));
       }
 
       fs.rmSync(path);
 
       return true;
-
-    } catch (error) {
+    } catch {
       return false;
     }
   }
 
-  deleteGameImages(idGame: string){
+  deleteGameImages(idGame: string) {
     try {
       const i18n = I18nContext.current<I18nTranslations>();
-      const path = join(`${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}`)
+      const path = join(`${__dirname}/../../../${this.pathContentPlayersImage}/${idGame}`);
 
-      if(!existsSync(path)){
+      if (!existsSync(path)) {
         throw new BadRequestException(i18n?.t('validation.fileValidation'));
       }
 
-      fs.rmdirSync(path, {recursive : true});
+      fs.rmdirSync(path, { recursive: true });
 
       return true;
-
-    } catch (error) {
+    } catch {
       return false;
     }
   }
-
-  
-
 }
-
-

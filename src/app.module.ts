@@ -7,6 +7,6 @@ import { GameSocketModule } from './websockets/game/game-socket.module';
 @Module({
   imports: [ConfigServerModule, ApiModule, CommonModule, GameSocketModule],
   controllers: [],
-  providers: []
+  providers: [],
 })
 export class AppModule {}

@@ -16,13 +16,11 @@ import { JwtStrategy } from '../../core/strategies/jwt-strategy';
 import { PassportModule } from '@nestjs/passport';
 import { jwtOptions, passportOptions } from 'src/core/config';
 import { WordService } from 'src/common/services/word.service';
+import { AuxiliarController } from './controllers/auxiliar.controller';
+import { AuxiliarService } from './services/auxiliar.service';
 
 @Module({
-  controllers: [
-    GameController,
-    GamePlayerController,
-    GameJoinController,
-  ],
+  controllers: [GameController, GamePlayerController, GameJoinController, AuxiliarController],
   imports: [
     CommonModule,
     TypeOrmModule.forFeature([Game, Player]),
@@ -34,18 +32,13 @@ import { WordService } from 'src/common/services/word.service';
     GameService,
     PlayerService,
     JoinService,
+    AuxiliarService,
     JwtService,
     AuthService,
     FilesService,
     JwtStrategy,
-    WordService
+    WordService,
   ],
-  exports: [
-    GameModule,
-    TypeOrmModule,
-    JwtModule,
-    PassportModule,
-    JwtModule
-  ]
+  exports: [GameModule, TypeOrmModule, JwtModule, PassportModule, JwtModule],
 })
 export class GameModule {}

@@ -5,7 +5,7 @@ import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { CreatePlayerDto } from './create-player.dto';
 
 export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {
-  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean')})
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean') })
   @IsOptional()
   avatarImg?: boolean;
 }

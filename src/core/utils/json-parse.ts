@@ -1,7 +1,7 @@
-export const safeJsonParse = (value: string) =>  {
+export const safeJsonParse = (value: string) => {
   try {
     return JSON.parse(value);
   } catch {
     return null;
   }
-}
+};

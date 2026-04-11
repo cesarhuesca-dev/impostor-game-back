@@ -5,15 +5,8 @@ import { WordService } from 'src/common/services/word.service';
 import { CommonModule } from 'src/common/common.module';
 
 @Module({
-  controllers: [
-    UtilsController
-  ],
-  imports : [
-    CommonModule,
-  ],
-  providers: [
-    UtilsService,
-    WordService
-  ],
+  controllers: [UtilsController],
+  imports: [CommonModule],
+  providers: [UtilsService, WordService],
 })
 export class UtilsModule {}

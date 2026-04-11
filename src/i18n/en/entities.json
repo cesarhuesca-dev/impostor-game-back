@@ -4,7 +4,8 @@
     "invalidInputs" : "Invalid inputs",
     "alreadyExist" : "Game already exist",
     "fullGameRoom" : "The room game is full",
-    "notStarted" : "The game not started"
+    "notStarted" : "The game not started",
+    "categoryEmpty" : "The category is empty"
   },
   "player" : {
     "notFound" : "Player not found",

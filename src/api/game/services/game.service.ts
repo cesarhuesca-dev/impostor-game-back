@@ -1,4 +1,11 @@
-import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { I18nContext, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
@@ -11,31 +18,28 @@ import * as bcrypt from 'bcrypt';
 import { FilesService } from 'src/common/services/files.service';
 import { WordService } from 'src/common/services/word.service';
 import { LanguagesSupported } from 'src/core/enum/languages.enum';
-import { Word } from 'src/common/interfaces/word.interface';
 import { PlayerService } from './player.service';
-
+import { WordCategories } from 'src/common/enums/categories.enum';
 
 @Injectable()
 export class GameService {
-
   constructor(
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly filesService: FilesService,
     private readonly wordService: WordService,
-    @Inject(forwardRef(() => PlayerService)) private readonly playerService: PlayerService
+    @Inject(forwardRef(() => PlayerService)) private readonly playerService: PlayerService,
   ) {}
 
   //#region CRUD METHODS
 
   async findOne(term: string): Promise<Game | null> {
     try {
-
       let game: Game | null = null;
 
-      if(isUUID(term)){
-        game = await this.gameRepository.findOneBy({ id : term.trim() });
-      }else{
+      if (isUUID(term)) {
+        game = await this.gameRepository.findOneBy({ id: term.trim() });
+      } else {
         game = await this.gameRepository.findOneBy({ roomName: term.trim() });
       }
 
@@ -47,9 +51,12 @@ export class GameService {
 
   async createGame(createGameDto: CreateGameDto): Promise<Game> {
     try {
-      const salt = await bcrypt.genSalt();
-
-      createGameDto.roomPassword = await bcrypt.hash(createGameDto.roomPassword, salt);
+      if (
+        createGameDto.specificCategory &&
+        (!createGameDto.category || createGameDto.category.length === 0)
+      ) {
+        throw new BadRequestException(this.i18n.t('entities.game.categoryEmpty'));
+      }
 
       const existGame = await this.gameRepository.findOneBy({ roomName: createGameDto.roomName });
 
@@ -57,12 +64,14 @@ export class GameService {
         throw new BadRequestException(this.i18n.t('entities.game.alreadyExist'));
       }
 
+      const salt = await bcrypt.genSalt();
+      createGameDto.roomPassword = await bcrypt.hash(createGameDto.roomPassword, salt);
+
       const game = this.gameRepository.create(createGameDto);
 
       await this.gameRepository.save(game);
 
       return game;
-
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
@@ -84,7 +93,7 @@ export class GameService {
         roomPassword: updateGameDto.roomPassword
           ? await bcrypt.hash(updateGameDto.roomPassword, salt)
           : game.roomPassword,
-        id: game.id
+        id: game.id,
       };
 
       const result = await this.gameRepository.save(updatedData, { reload: true });
@@ -110,7 +119,6 @@ export class GameService {
 
   async verifyJoinGame(roomName: string, roomPassword: string): Promise<boolean> {
     try {
-    
       const game = await this.findOne(roomName);
 
       if (!game) {
@@ -119,19 +127,18 @@ export class GameService {
 
       const isMatch = await bcrypt.compare(roomPassword, game.roomPassword);
 
-      if(!game || !isMatch) throw new BadRequestException(this.i18n.t('entities.game.invalidInputs'));
-      if(game.roomPlayersJoined >= game.roomPlayers) throw new UnauthorizedException(this.i18n.t('entities.game.fullGameRoom'))
+      if (!game || !isMatch)
+        throw new BadRequestException(this.i18n.t('entities.game.invalidInputs'));
+      if (game.roomPlayersJoined >= game.roomPlayers)
+        throw new UnauthorizedException(this.i18n.t('entities.game.fullGameRoom'));
 
       return true;
-
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  
-
-  async startGame(gameId: string): Promise<Game>{
+  async startGame(gameId: string): Promise<Game> {
     try {
       const game = await this.updateGame(gameId, { gameStarted: true });
       return game;
@@ -140,88 +147,142 @@ export class GameService {
     }
   }
 
-  async endGame(gameId: string): Promise<boolean>{
+  async endGame(gameId: string): Promise<Game> {
     try {
-      await this.updateGame(gameId, { gameStarted: false, round: 0, category: null, word: null });
-      return true;
+      const game = await this.updateGame(gameId, {
+        gameStarted: false,
+        round: 0,
+        category: null,
+        word: null,
+      });
+      return game;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async newRound(gameId: string): Promise<Word>{
+  async newRound(gameId: string, word: string | null = null): Promise<Game> {
     try {
-
       const game = await this.findOne(gameId);
 
       if (!game) {
         throw new NotFoundException(this.i18n.t('entities.game.notFound'));
       }
 
-      if(!game.gameStarted){
+      if (!game.gameStarted) {
         throw new BadRequestException(this.i18n.t('entities.game.notStarted'));
       }
 
-      const i18nLang = I18nContext.current<I18nTranslations>()?.lang as LanguagesSupported ?? null;
+      const i18nLang =
+        (I18nContext.current<I18nTranslations>()?.lang as LanguagesSupported) ?? null;
 
-      if(!i18nLang){
+      if (!i18nLang) {
         throw new BadRequestException(this.i18n.t('exceptions.notAcceptable'));
       }
 
-      const word = await this.wordService.getRandomWord(i18nLang);
+      //Conseguir un nuevo impostor
+      const multipleImpostors = game.multipleImpostors ? Math.random() < 0.05 : false;
 
-      if(!word){
+      const impostor = await this.playerService.newRoundImpostor(gameId, multipleImpostors);
+
+      if (!impostor) {
         throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
       }
 
-      await this.updateGame(gameId, { round: game.round + 1, word: word.word, category: word.category });
+      //Conseguir una palabra y categoria
+      let category: WordCategories | null = null;
 
-      const impostor = await this.playerService.newRoundImpostor(gameId);
+      if (!word) {
+        category =
+          game.specificCategory && game.category && game.category.length > 0
+            ? WordCategories[game.category]
+            : WordCategories.all;
 
-      if(!impostor) {
-        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+        const randomWord = await this.wordService.getRandomWord(i18nLang, category!);
+
+        if (!randomWord) {
+          throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+        }
+
+        word = randomWord.word;
       }
 
-      return word;
+      word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+
+      const updatedGame = await this.updateGame(gameId, { word: word, category: category });
+      return updatedGame;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  async changeWord(gameId: string): Promise<Word>{
+  async changeWord(gameId: string, word: string | null = null): Promise<Game> {
     try {
-
       const game = await this.findOne(gameId);
 
       if (!game) {
         throw new NotFoundException(this.i18n.t('entities.game.notFound'));
       }
 
-      if(!game.gameStarted){
+      if (!game.gameStarted) {
         throw new BadRequestException(this.i18n.t('entities.game.notStarted'));
       }
 
-      const i18nLang = I18nContext.current<I18nTranslations>()?.lang as LanguagesSupported ?? null;
+      const i18nLang =
+        (I18nContext.current<I18nTranslations>()?.lang as LanguagesSupported) ?? null;
 
-      if(!i18nLang){
+      if (!i18nLang) {
         throw new BadRequestException(this.i18n.t('exceptions.notAcceptable'));
       }
 
-      const word = await this.wordService.getRandomWord(i18nLang);
+      let category: WordCategories | null = null;
 
-      if(!word){
-        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+      if (!word) {
+        category =
+          game.specificCategory && game.category && game.category.length > 0
+            ? WordCategories[game.category]
+            : WordCategories.all;
+
+        const randomWord = await this.wordService.getRandomWord(i18nLang, category!);
+
+        if (!randomWord) {
+          throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+        }
+
+        word = randomWord.word;
       }
 
-      await this.updateGame(gameId, { word: word.word, category: word.category });
+      word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
-      return word;
+      const updatedGame = await this.updateGame(gameId, { word: word, category: category });
+      return updatedGame;
     } catch (error) {
       ExceptionBuilder.handleException(error, 'GameService');
     }
   }
 
-  
+  async changeCategory(gameId: string, category: string): Promise<Game> {
+    try {
+      const game = await this.findOne(gameId);
 
-  
+      if (!game) {
+        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      }
+
+      const newCategory = WordCategories[category];
+
+      if (!newCategory) {
+        throw new NotFoundException(this.i18n.t('exceptions.badRequest'));
+      }
+
+      const result = await this.updateGame(gameId, {
+        specificCategory: true,
+        category: newCategory,
+      });
+
+      return result;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, 'GameService');
+    }
+  }
 }

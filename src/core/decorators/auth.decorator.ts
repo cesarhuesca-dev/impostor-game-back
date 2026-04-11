@@ -1,7 +1,6 @@
-
 import { applyDecorators, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+// import { AuthGuard } from '@nestjs/passport';
 
 // export function Auth(...roles: Role[]) {
 //   return applyDecorators(

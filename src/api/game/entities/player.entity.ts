@@ -1,45 +1,40 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PlayerDto } from "../dto";
-import { Game } from "./game.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { PlayerDto } from '../dto';
+import { Game } from './game.entity';
 
-@Entity({name: 'player'})
+@Entity({ name: 'player' })
 export class Player {
-
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
-  @Column({type:'text', unique: true})
-  name: string;
+  @Column({ type: 'text', unique: true })
+  name!: string;
 
-  @Column({type:'bool', default: false})
-  host: boolean;
+  @Column({ type: 'bool', default: false })
+  host!: boolean;
 
-  @Column({type:'bool', default: false})
-  avatarImg: boolean;
+  @Column({ type: 'bool', default: false })
+  avatarImg!: boolean;
 
-  @Column({type:'bool', default: false})
-  impostor: boolean;
+  @Column({ type: 'bool', default: false })
+  impostor!: boolean;
 
-  @ManyToOne(() => Game, game => game.player, { eager: true, cascade: true, onDelete: 'CASCADE' })
-  game: Game
+  @ManyToOne(() => Game, (game) => game.player, { eager: true, cascade: true, onDelete: 'CASCADE' })
+  game!: Game;
 
-  static toPlain(player: Player, gameInfo: boolean = true) : PlayerDto {
-
-    let obj : PlayerDto = {
+  static toPlain(player: Player, gameInfo: boolean = true): PlayerDto {
+    const obj: PlayerDto = {
       id: player.id,
       name: player.name,
       host: player.host,
       avatarImg: player.avatarImg,
-      impostor: player.impostor
+      impostor: player.impostor,
     };
 
-    if(gameInfo){
+    if (gameInfo) {
       obj.game = Game.toPlain(player.game);
     }
 
     return obj;
-
   }
-
-
 }

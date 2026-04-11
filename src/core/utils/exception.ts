@@ -7,7 +7,7 @@ import {
   RequestTimeoutException,
   MisdirectedException,
   MethodNotAllowedException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiResponse } from '../interface/response.interface';
 import { QueryFailedError } from 'typeorm';
@@ -17,7 +17,7 @@ export class ExceptionBuilder {
     data: T | T[],
     status = 200,
     success: boolean = true,
-    message: string | string[] = []
+    message: string | string[] = [],
   ): ApiResponse<T> {
     const dataFormated = Array.isArray(data) ? data : [data];
     const messageFormated = Array.isArray(message) ? message : [message];
@@ -26,15 +26,14 @@ export class ExceptionBuilder {
       status,
       message: messageFormated,
       data: dataFormated,
-      success
+      success,
     };
   }
 
   static handleException(error: unknown, loggerTopic: string = ''): never {
-    
-    if(error instanceof QueryFailedError){
+    if (error instanceof QueryFailedError) {
       this.handleDbException(error, loggerTopic);
-    }else{
+    } else {
       this.handleAppException(error, loggerTopic);
     }
 
@@ -44,7 +43,8 @@ export class ExceptionBuilder {
     throw new InternalServerErrorException('INTERNAL SERVER ERROR');
   }
 
-  private static handleAppException(error: unknown, loggerTopic: string = ''): never | void{
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private static handleAppException(error: unknown, loggerTopic: string = ''): never | void {
     if (error instanceof NotFoundException) {
       throw new NotFoundException(error.getResponse());
     }
@@ -74,8 +74,8 @@ export class ExceptionBuilder {
     }
   }
 
-  private static handleDbException(error: unknown, loggerTopic: string = ''): never | void{
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private static handleDbException(error: unknown, loggerTopic: string = ''): never | void {
     // if (error.code === '23505') {
     //   throw new BadRequestException(error.detail);
     // }
@@ -83,7 +83,6 @@ export class ExceptionBuilder {
     // if (error.code === '22P02') {
     //   throw new BadRequestException('Product not exist');
     // }
-    console.log('ERROR', error)
-
+    console.log('ERROR', error);
   }
 }

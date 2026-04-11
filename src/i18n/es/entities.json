@@ -4,7 +4,8 @@
     "invalidInputs" : "Campos no válidos",
     "alreadyExist" : "La sala de juego ya existe",
     "fullGameRoom" : "La sala de juego esta llena",
-    "notStarted" : "La partida aun no ha empezado"
+    "notStarted" : "La partida aun no ha empezado",
+    "categoryEmpty" : "No se ha indicado categoría"
   },
   "player" : {
     "notFound" : "Jugador no encontrado",

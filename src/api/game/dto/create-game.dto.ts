@@ -5,118 +5,50 @@ import {
   IsOptional,
   IsString,
   Min,
-  MinLength
+  MinLength,
 } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 
 export class CreateGameDto {
-  @IsString({
-    message: i18nValidationMessage<I18nTranslations>('validation.isString', {
-      property: 'roomName'
-    })
-  })
+  @IsString({ message: i18nValidationMessage<I18nTranslations>('validation.isString') })
   @MinLength(3, {
-    message: i18nValidationMessage<I18nTranslations>('validation.minLength', {
-      property: 'roomName',
-      constraints: [3]
-    })
+    message: i18nValidationMessage<I18nTranslations>('validation.minLength', { constraints: [3] }),
   })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'roomName'
-    })
-  })
-  roomName: string;
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  roomName!: string;
 
-  @IsString({ message: i18nValidationMessage('validation.isString', { property: 'roomPassword' }) })
+  @IsString({ message: i18nValidationMessage('validation.isString') })
   @MinLength(3, {
-    message: i18nValidationMessage<I18nTranslations>('validation.minLength', {
-      property: 'roomPassword',
-      constraints: [3]
-    })
+    message: i18nValidationMessage<I18nTranslations>('validation.minLength', { constraints: [3] }),
   })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'roomPassword'
-    })
-  })
-  roomPassword: string;
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  roomPassword!: string;
 
-  @IsNumber(
-    {},
-    {
-      message: i18nValidationMessage<I18nTranslations>('validation.isNumber', {
-        property: 'roomPlayers'
-      })
-    }
-  )
+  @IsNumber({}, { message: i18nValidationMessage<I18nTranslations>('validation.isNumber') })
   @Min(4, {
-    message: i18nValidationMessage<I18nTranslations>('validation.min', {
-      property: 'roomPlayers',
-      constraints: [4]
-    })
+    message: i18nValidationMessage<I18nTranslations>('validation.min', { constraints: [4] }),
   })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'roomPlayers'
-    })
-  })
-  roomPlayers: number;
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  roomPlayers!: number;
 
-  @IsBoolean({
-    message: i18nValidationMessage<I18nTranslations>('validation.isBoolean', {
-      property: 'customWords'
-    })
-  })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'customWords'
-    })
-  })
-  customWords: boolean;
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean') })
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  customWords!: boolean;
 
-  @IsBoolean({
-    message: i18nValidationMessage<I18nTranslations>('validation.isBoolean', {
-      property: 'category'
-    })
-  })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'category'
-    })
-  })
-  specificCategory: boolean;
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean') })
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  specificCategory!: boolean;
 
-  @IsString({
-    message: i18nValidationMessage<I18nTranslations>('validation.isString', {
-      property: 'specificCategory'
-    })
-  })
+  @IsString({ message: i18nValidationMessage<I18nTranslations>('validation.isString') })
   @IsOptional()
-  category: string;
+  category!: string;
 
-  @IsBoolean({
-    message: i18nValidationMessage<I18nTranslations>('validation.isBoolean', {
-      property: 'multipleImpostors'
-    })
-  })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'multipleImpostors'
-    })
-  })
-  multipleImpostors: boolean;
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean') })
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  multipleImpostors!: boolean;
 
-  @IsBoolean({
-    message: i18nValidationMessage<I18nTranslations>('validation.isBoolean', {
-      property: 'overlay'
-    })
-  })
-  @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty', {
-      property: 'overlay'
-    })
-  })
-  overlay: boolean;
+  @IsBoolean({ message: i18nValidationMessage<I18nTranslations>('validation.isBoolean') })
+  @IsNotEmpty({ message: i18nValidationMessage<I18nTranslations>('validation.isNotEmpty') })
+  overlay!: boolean;
 }

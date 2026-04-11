@@ -5,7 +5,7 @@ export class ResponseBuilder {
     data: T | T[],
     status = 200,
     success: boolean = true,
-    message: string | string[] = []
+    message: string | string[] = [],
   ): ApiResponse<T> {
     const dataFormated = Array.isArray(data) ? data : [data];
     const messageFormated = Array.isArray(message) ? message : [message];
@@ -14,7 +14,7 @@ export class ResponseBuilder {
       status,
       message: messageFormated,
       data: dataFormated,
-      success
+      success,
     };
   }
 
@@ -25,7 +25,7 @@ export class ResponseBuilder {
       status,
       message: messageFormated,
       data: [],
-      success: true
+      success: true,
     };
   }
 
@@ -36,7 +36,7 @@ export class ResponseBuilder {
       status,
       message: messageFormated,
       data: [],
-      success: false
+      success: false,
     };
   }
 }

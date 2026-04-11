@@ -11,9 +11,9 @@ const i18nSchema = (configService: ConfigService<EnvInterface>): I18nOptionsWith
     loaderOptions: {
       path: path.join(__dirname, '/../../i18n/'),
       watch: true,
-      includeSubfolders: true
+      includeSubfolders: true,
     },
-    typesOutputPath: path.join(__dirname, '../../../src/i18n/generated/i18n.generated.ts')
+    typesOutputPath: path.join(__dirname, '../../../src/i18n/generated/i18n.generated.ts'),
   };
 };
 
@@ -24,6 +24,6 @@ export const i18nOptions: I18nAsyncOptions = {
   resolvers: [
     { use: QueryResolver, options: ['lang'] },
     AcceptLanguageResolver,
-    new HeaderResolver(['x-lang'])
-  ]
+    new HeaderResolver(['x-lang']),
+  ],
 };

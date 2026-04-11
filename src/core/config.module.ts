@@ -13,6 +13,6 @@ import { configOptions, databaseOptions, i18nOptions } from './config';
   providers: [
     //REVISAR SI TENGO QUE PONER ESTRATEGIAS PARA EL AUTH JWT
   ],
-  exports: [ConfigServerModule, ConfigModule, TypeOrmModule, I18nModule]
+  exports: [ConfigServerModule, ConfigModule, TypeOrmModule, I18nModule],
 })
 export class ConfigServerModule {}

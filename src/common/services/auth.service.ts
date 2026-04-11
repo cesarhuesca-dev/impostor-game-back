@@ -6,37 +6,36 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService<EnvInterface>
-  ){
-    
-  }
-  
-  getJwtToken( gameId: string, playerId:string ): string {
+    private readonly configService: ConfigService<EnvInterface>,
+  ) {}
 
-    const payload : JwtPayloadInterface = {
+  getJwtToken(gameId: string, playerId: string): string {
+    const payload: JwtPayloadInterface = {
       gameId,
-      playerId
+      playerId,
     };
 
-    return this.jwtService.sign(payload, {secret : this.configService.get('JWT_SECRET'), expiresIn: '2h'});
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_SECRET'),
+      expiresIn: '2h',
+    });
   }
 
-  verifyJwtToken(token: string) : JwtPayloadInterface | null {
-
+  verifyJwtToken(token: string): JwtPayloadInterface | null {
     try {
-      const verified = this.jwtService.verify(token, {secret : this.configService.get('JWT_SECRET')});
+      const verified = this.jwtService.verify(token, {
+        secret: this.configService.get('JWT_SECRET'),
+      });
 
-      if(!verified){
+      if (!verified) {
         return null;
       }
 
       return verified;
-    } catch (error) {
+    } catch {
       return null;
     }
-    
   }
 }

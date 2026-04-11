@@ -1,4 +1,4 @@
-import { PlayerDto } from "./player.dto";
+import { PlayerDto } from './player.dto';
 
 export interface GameDto {
   id: string;
@@ -11,10 +11,8 @@ export interface GameDto {
   multipleImpostors: boolean;
   overlay: boolean;
   gameStarted: boolean;
-  showingImpostor: boolean;
-  showingWord: boolean;
   roomPlayersJoined: number;
   round: number;
   word: string | null;
-  players?: PlayerDto[]
+  players?: PlayerDto[];
 }

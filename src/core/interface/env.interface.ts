@@ -1,6 +1,8 @@
+import { LanguagesSupported } from '../enum/languages.enum';
+
 export interface EnvInterface {
   ENVIRONMENT: EnvironmentMode;
-  FALLBACK_LANGUAGE: SupportLanguages;
+  FALLBACK_LANGUAGE: LanguagesSupported;
   DB_USER: string;
   DB_PASSWORD: string;
   DB_NAME: string;
@@ -15,10 +17,5 @@ export interface EnvInterface {
 
 export enum EnvironmentMode {
   Production = 'production',
-  Development = 'development'
-}
-
-export enum SupportLanguages {
-  ES = 'es',
-  EN = 'en'
+  Development = 'development',
 }

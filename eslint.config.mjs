@@ -8,9 +8,9 @@ export default tseslint.config(
   {
     ignores: ['eslint.config.mjs'],
   },
-  // eslintPluginPrettierRecommended,
-  // eslint.configs.recommended,
-  // ...tseslint.configs.recommended,
+  eslintPluginPrettierRecommended,
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
 
   {
     languageOptions: {
@@ -30,7 +30,7 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
-       "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
       "no-multiple-empty-lines": ["error", { "max": 3, "maxBOF": 3, "maxEOF": 3 }],
       "comma-dangle" : [ "error", {
           "objects": "ignore",

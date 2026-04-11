@@ -6,31 +6,26 @@ import { JoinService } from '../services/join.service';
 
 @Controller('/game/join')
 export class GameJoinController {
-  constructor(
-    private readonly joinService: JoinService,
-  ) {}
+  constructor(private readonly joinService: JoinService) {}
 
   //#region JOIN REGION
 
   @Post('/verify')
   async verifyJoinGame(@Body() verifyGameDto: VerifyGameDto) {
-
     const result = await this.joinService.verifyJoinGame(verifyGameDto);
 
-    if(result){
+    if (result) {
       return ResponseBuilder.buildSuccess();
-    }else{
+    } else {
       return ResponseBuilder.buildNotSuccess();
     }
-
   }
 
   @Post('/')
   async joinGame(@Body() createJoinGameDto: CreateJoinGameDto) {
-    const result = await this.joinService.joinGame(createJoinGameDto)
+    const result = await this.joinService.joinGame(createJoinGameDto);
     return ResponseBuilder.build<JoinDto>(result);
   }
 
   //#endregion
-
 }

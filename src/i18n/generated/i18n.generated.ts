@@ -29,6 +29,7 @@ export type I18nTranslations = {
             "alreadyExist": string;
             "fullGameRoom": string;
             "notStarted": string;
+            "categoryEmpty": string;
         };
         "player": {
             "notFound": string;

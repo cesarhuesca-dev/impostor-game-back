@@ -11,16 +11,14 @@ import { Player } from '../entities';
 
 @Injectable()
 export class JoinService {
-
   constructor(
     @Inject(GameService) private readonly gameService: GameService,
     @Inject(PlayerService) private readonly playerService: PlayerService,
     @Inject(AuthService) private readonly authService: AuthService,
-    private readonly i18n: I18nService<I18nTranslations>
-  ){}
-  
-  async verifyJoinGame(verifyGameDto: VerifyGameDto): Promise<boolean> {
+    private readonly i18n: I18nService<I18nTranslations>,
+  ) {}
 
+  async verifyJoinGame(verifyGameDto: VerifyGameDto): Promise<boolean> {
     const { roomName, roomPassword } = verifyGameDto;
 
     const verified = await this.gameService.verifyJoinGame(roomName, roomPassword);
@@ -29,14 +27,12 @@ export class JoinService {
   }
 
   async joinGame(createJoinGameDto: CreateJoinGameDto): Promise<JoinDto> {
-
     try {
-      
       const { roomName, roomPassword, playerName, host } = createJoinGameDto;
 
       const verified = await this.gameService.verifyJoinGame(roomName, roomPassword);
 
-      if(!verified){
+      if (!verified) {
         throw new BadRequestException(this.i18n.t('entities.game.alreadyExist'));
       }
 
@@ -46,22 +42,16 @@ export class JoinService {
         throw new NotFoundException(this.i18n.t('entities.game.notFound'));
       }
 
-      const player =  await this.playerService.createPlayer(playerName, game.id, host);
+      const player = await this.playerService.createPlayer(playerName, game.id, host);
 
-      await this.gameService.updateGame(game.id, { roomPlayersJoined: (game.roomPlayersJoined + 1) });
+      await this.gameService.updateGame(game.id, { roomPlayersJoined: game.roomPlayersJoined + 1 });
 
       return {
         player: Player.toPlain(player),
-        token: this.authService.getJwtToken(game.id, player.id)
+        token: this.authService.getJwtToken(game.id, player.id),
       };
-
     } catch (error) {
       ExceptionBuilder.handleException(error, 'JoinService');
     }
   }
-
-  
-  
-
-
 }
