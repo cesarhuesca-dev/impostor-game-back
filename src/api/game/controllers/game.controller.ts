@@ -139,7 +139,7 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
-  @Auth()
+  // @Auth()
   @Delete('/:id')
   async deleteGame(@Param('id', ParseUUIDPipe) id: string) {
     const result = await this.gameService.deleteGame(id);
