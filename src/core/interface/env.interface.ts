@@ -3,6 +3,7 @@ import { LanguagesSupported } from '../enum/languages.enum';
 export interface EnvInterface {
   ENVIRONMENT: EnvironmentMode;
   FALLBACK_LANGUAGE: LanguagesSupported;
+  DB_TYPE: DatabaseType;
   DB_USER: string;
   DB_PASSWORD: string;
   DB_NAME: string;
@@ -18,4 +19,8 @@ export interface EnvInterface {
 export enum EnvironmentMode {
   Production = 'production',
   Development = 'development',
+}
+export enum DatabaseType {
+  Sqlite = 'sqlite',
+  Postgres = 'postgres',
 }

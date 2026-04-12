@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import z from 'zod';
 
-import { EnvInterface, EnvironmentMode } from '../interface/env.interface';
+import { DatabaseType, EnvInterface, EnvironmentMode } from '../interface/env.interface';
 import { ConfigModuleOptions } from '@nestjs/config';
 import { LanguagesSupported } from '../enum/languages.enum';
 
@@ -15,6 +15,7 @@ const envValidationSchema = () => {
       .valid(...Object.values(LanguagesSupported)),
 
     //DATABASE
+    DB_TYPE: Joi.string().required(),
     DB_USER: Joi.string().required(),
     DB_PASSWORD: Joi.string().required(),
     DB_NAME: Joi.string().required(),
@@ -36,6 +37,7 @@ const envZodSchema = z.object({
   ENVIRONMENT: z.literal(Object.values(EnvironmentMode)),
   FALLBACK_LANGUAGE: z.literal(Object.values(LanguagesSupported)),
   //DATABASE
+  DB_TYPE: z.string(),
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
@@ -59,6 +61,7 @@ export const envs = (): EnvInterface => {
         ? EnvironmentMode.Production
         : EnvironmentMode.Development,
     FALLBACK_LANGUAGE: parsed.FALLBACK_LANGUAGE,
+    DB_TYPE: parsed.DB_TYPE === DatabaseType.Postgres ? DatabaseType.Postgres : DatabaseType.Sqlite,
     DB_USER: parsed.DB_USER,
     DB_PASSWORD: parsed.DB_PASSWORD,
     DB_NAME: parsed.DB_NAME,

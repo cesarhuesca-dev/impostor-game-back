@@ -10,13 +10,13 @@ export class Player {
   @Column({ type: 'text', unique: true })
   name!: string;
 
-  @Column({ type: 'bool', default: false })
+  @Column({ type: 'boolean', default: false })
   host!: boolean;
 
-  @Column({ type: 'bool', default: false })
+  @Column({ type: 'boolean', default: false })
   avatarImg!: boolean;
 
-  @Column({ type: 'bool', default: false })
+  @Column({ type: 'boolean', default: false })
   impostor!: boolean;
 
   @ManyToOne(() => Game, (game) => game.player, { eager: true, cascade: true, onDelete: 'CASCADE' })

@@ -20,10 +20,10 @@ export class Game {
   @Column({ type: 'text', nullable: true })
   word!: string | null;
 
-  @Column({ type: 'bool', default: false })
+  @Column({ type: 'boolean', default: false })
   customWords!: boolean;
 
-  @Column({ type: 'bool', default: false })
+  @Column({ type: 'boolean', default: false })
   specificCategory!: boolean;
 
   @Column({ type: 'text', nullable: true })
@@ -43,7 +43,7 @@ export class Game {
   @Column({ type: 'integer', default: 0 })
   round!: number;
 
-  @Column({ type: 'bool', default: false })
+  @Column({ type: 'boolean', default: false })
   gameStarted!: boolean;
 
   @OneToMany(() => Player, (player) => player.game)

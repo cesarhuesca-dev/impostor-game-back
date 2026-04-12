@@ -1,11 +1,14 @@
+
+/content/games/*
+!/content/games/.gitkeep
+/data/
+
 # compiled output
 /dist
 /node_modules
 /build
 /postgres
 
-/content/games/*
-!/content/games/.gitkeep
 
 # Logs
 logs
