@@ -1,9 +1,13 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DatabaseType, EnvInterface, EnvironmentMode } from '../interface/env.interface';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 
 const databaseSchema = (configService: ConfigService<EnvInterface>): TypeOrmModuleOptions => {
+  const logger = new Logger('DatabaseType');
+
   if (configService.get('DB_TYPE') === DatabaseType.Postgres) {
+    logger.log('Database postgres selected');
     return {
       type: 'postgres',
       host: configService.get('DB_HOST'),
@@ -16,6 +20,7 @@ const databaseSchema = (configService: ConfigService<EnvInterface>): TypeOrmModu
         configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true,
     };
   } else {
+    logger.log('Database sqlite selected');
     return {
       type: 'sqlite',
       database: `data/db.${configService.get('DB_NAME')}`,

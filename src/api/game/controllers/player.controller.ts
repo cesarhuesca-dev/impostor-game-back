@@ -32,6 +32,19 @@ export class GamePlayerController {
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
+  //#region PLAYER NO AUTH
+
+  @Get('/image/:id')
+  async getPlayerImage(@Res() res, @Param('id', ParseUUIDPipe) id: string) {
+    const result = await this.playerService.getImage(id);
+    if (!result) return res.status(400).json(ResponseBuilder.buildNotSuccess());
+    return res.sendFile(result);
+  }
+
+  //#endregion
+
+  //#region PLAYER AUTH
+
   @Auth()
   @Get('/token')
   async getPlayerByToken(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
@@ -75,13 +88,6 @@ export class GamePlayerController {
     }
 
     return ResponseBuilder.buildSuccess();
-  }
-
-  @Get('/image/:id')
-  async getPlayerImage(@Res() res, @Param('id', ParseUUIDPipe) id: string) {
-    const result = await this.playerService.getImage(id);
-    if (!result) return res.status(400).json(ResponseBuilder.buildNotSuccess());
-    return res.sendFile(result);
   }
 
   @Auth()

@@ -15,7 +15,7 @@ import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { GameDto, CreateGameDto, UpdateGameDto } from '../dto';
 import { Game, Player } from '../entities';
 import { I18nService } from 'nestjs-i18n';
-import { Auth } from 'src/core/decorators/auth.decorator';
+import { Auth, AuthHost } from 'src/core/decorators/auth.decorator';
 import { GetRequestJwtPayload } from 'src/core/decorators/get-request-jwt-payload.decorator';
 import { GameSocketService } from 'src/websockets/game/game-socket.service';
 import type { JwtPayloadInterface } from 'src/core/interface/jwt.interface';
@@ -31,7 +31,28 @@ export class GameController {
     private readonly socketService: GameSocketService,
   ) {}
 
-  //#region GAME REGION
+  //#region GAME NO AUTH
+
+  @Post('/')
+  async createGame(@Body() createGameDto: CreateGameDto) {
+    const result = await this.gameService.createGame(createGameDto);
+    return ResponseBuilder.build<GameDto>(Game.toPlain(result));
+  }
+
+  // @Auth()
+  @Delete('/:id')
+  async deleteGame(@Param('id', ParseUUIDPipe) id: string) {
+    const result = await this.gameService.deleteGame(id);
+
+    if (!result) return ResponseBuilder.buildNotSuccess();
+
+    await this.socketService.emitCloseGame(id);
+    return ResponseBuilder.buildSuccess();
+  }
+
+  //#endregion
+
+  //#region GAME AUTH
 
   @Auth()
   @Get('/:id')
@@ -49,13 +70,11 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(resultGame, playersDto));
   }
 
-  @Post('/')
-  async createGame(@Body() createGameDto: CreateGameDto) {
-    const result = await this.gameService.createGame(createGameDto);
-    return ResponseBuilder.build<GameDto>(Game.toPlain(result));
-  }
+  //#endregion
 
-  @Auth()
+  //#region GAME HOST
+
+  @AuthHost()
   @Post('/start')
   async startGame(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
     const { gameId } = payload;
@@ -68,7 +87,7 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
-  @Auth()
+  @AuthHost()
   @Post('/end')
   async endGame(@GetRequestJwtPayload() payload: JwtPayloadInterface) {
     const { gameId } = payload;
@@ -81,7 +100,7 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
-  @Auth()
+  @AuthHost()
   @Post('/round')
   async nextRound(
     @Body() updateGameDto: UpdateGameDto,
@@ -98,7 +117,7 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(resultWord));
   }
 
-  @Auth()
+  @AuthHost()
   @Post('/word')
   async changeWord(
     @Body() updateGameDto: UpdateGameDto,
@@ -115,14 +134,14 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(resultWord));
   }
 
-  @Auth()
+  @AuthHost()
   @Patch('/:id')
   async updateGame(@Param('id', ParseUUIDPipe) id: string, @Body() updateGameDto: UpdateGameDto) {
     const result = await this.gameService.updateGame(id, updateGameDto);
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
-  @Auth()
+  @AuthHost()
   @Patch('/:id/category')
   async updateGameCategory(
     @Param('id', ParseUUIDPipe) idGame: string,
@@ -139,14 +158,5 @@ export class GameController {
     return ResponseBuilder.build<GameDto>(Game.toPlain(result));
   }
 
-  // @Auth()
-  @Delete('/:id')
-  async deleteGame(@Param('id', ParseUUIDPipe) id: string) {
-    const result = await this.gameService.deleteGame(id);
-
-    if (!result) return ResponseBuilder.buildNotSuccess();
-
-    await this.socketService.emitCloseGame(id);
-    return ResponseBuilder.buildSuccess();
-  }
+  //#endregion
 }

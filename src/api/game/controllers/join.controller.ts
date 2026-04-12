@@ -8,7 +8,7 @@ import { JoinService } from '../services/join.service';
 export class GameJoinController {
   constructor(private readonly joinService: JoinService) {}
 
-  //#region JOIN REGION
+  //#region JOIN NO AUTH
 
   @Post('/verify')
   async verifyJoinGame(@Body() verifyGameDto: VerifyGameDto) {
