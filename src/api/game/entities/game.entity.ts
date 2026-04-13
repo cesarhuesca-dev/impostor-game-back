@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { GameDto } from '../dto/game.dto';
 import { Player } from './player.entity';
 import { PlayerDto } from '../dto';
@@ -45,6 +52,12 @@ export class Game {
 
   @Column({ type: 'boolean', default: false })
   gameStarted!: boolean;
+
+  @CreateDateColumn({})
+  createdAt!: Date;
+
+  @UpdateDateColumn({})
+  updatedAt!: Date;
 
   @OneToMany(() => Player, (player) => player.game)
   player!: Player;

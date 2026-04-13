@@ -39,6 +39,21 @@ import { AuxiliarService } from './services/auxiliar.service';
     JwtStrategy,
     WordService,
   ],
-  exports: [GameModule, TypeOrmModule, JwtModule, PassportModule, JwtModule],
+  exports: [
+    GameModule,
+    TypeOrmModule,
+    JwtModule,
+    PassportModule,
+    JwtModule,
+    GameService,
+    PlayerService,
+    JoinService,
+    AuxiliarService,
+    JwtService,
+    AuthService,
+    FilesService,
+    JwtStrategy,
+    WordService,
+  ],
 })
 export class GameModule {}
