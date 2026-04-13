@@ -5,6 +5,7 @@ import { Logger } from '@nestjs/common';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 import { CustomExceptionFilter } from './core/filters/exception.filter';
 import { I18nCustomValidationExceptionFilter } from './core/filters/i18n-validation-exception.filter';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap(): Promise<void> {
   const env = envs();
 
   app.setGlobalPrefix('api');
+  app.use(cookieParser());
   app.useGlobalFilters(
     new CustomExceptionFilter(),
     new I18nValidationExceptionFilter({ detailedErrors: false }),
@@ -25,7 +27,7 @@ async function bootstrap(): Promise<void> {
       transform: true,
     }),
   );
-  app.enableCors({ origin: env.HOST_FRONT });
+  app.enableCors({ origin: env.HOST_FRONT, credentials: true });
 
   await app.listen(env.SERVER_PORT);
   logger.log(`Server running on port ${env.SERVER_PORT}`);

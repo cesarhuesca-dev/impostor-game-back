@@ -1,9 +1,17 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { I18nAsyncOptions, I18nOptionsWithoutResolvers } from 'nestjs-i18n';
+import {
+  CookieResolver,
+  I18nAsyncOptions,
+  I18nOptionsWithoutResolvers,
+  I18nResolver,
+} from 'nestjs-i18n';
 import { AcceptLanguageResolver, HeaderResolver, QueryResolver } from 'nestjs-i18n';
 
 import * as path from 'path';
 import { EnvInterface } from '../interface/env.interface';
+import { Settings } from '../interface/settings.interface';
+import { Request } from 'express';
+import { ExecutionContext } from '@nestjs/common';
 
 const i18nSchema = (configService: ConfigService<EnvInterface>): I18nOptionsWithoutResolvers => {
   return {
@@ -17,13 +25,34 @@ const i18nSchema = (configService: ConfigService<EnvInterface>): I18nOptionsWith
   };
 };
 
+class CustomCookieResolver implements I18nResolver {
+  resolve(context: ExecutionContext): string | string[] {
+    try {
+      const request = context.switchToHttp().getRequest<Request>();
+      const raw = request.cookies?.settings;
+
+      if (typeof raw !== 'string') {
+        return process.env.FALLBACK_LANGUAGE ?? 'en';
+      }
+
+      const settings: Settings = JSON.parse(raw);
+
+      return settings.language;
+    } catch {
+      return process.env.FALLBACK_LANGUAGE ?? 'en';
+    }
+  }
+}
+
 export const i18nOptions: I18nAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (configService: ConfigService<EnvInterface>) => i18nSchema(configService),
   resolvers: [
+    new CookieResolver(),
+    new CustomCookieResolver(),
+    new HeaderResolver(['x-lang']),
     { use: QueryResolver, options: ['lang'] },
     AcceptLanguageResolver,
-    new HeaderResolver(['x-lang']),
   ],
 };
