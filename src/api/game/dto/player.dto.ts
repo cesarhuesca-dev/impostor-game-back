@@ -1,4 +1,5 @@
 import { GameDto } from 'src/api/game/dto/game.dto';
+import { UserRoles } from 'src/core/enum/roles.enum';
 
 export interface PlayerDto {
   id: string;
@@ -6,6 +7,7 @@ export interface PlayerDto {
   host: boolean;
   avatarImg: boolean;
   impostor: boolean;
+  roles: UserRoles[];
 
   game?: GameDto;
 }

@@ -45,7 +45,7 @@ export class GameService {
 
       return game;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -73,7 +73,7 @@ export class GameService {
 
       return game;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -100,7 +100,7 @@ export class GameService {
 
       return result;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -111,7 +111,7 @@ export class GameService {
       this.filesService.deleteGameImages(id);
       return true;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -134,7 +134,7 @@ export class GameService {
 
       return true;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -143,7 +143,7 @@ export class GameService {
       const game = await this.updateGame(gameId, { gameStarted: true });
       return game;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -157,7 +157,7 @@ export class GameService {
       });
       return game;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -212,7 +212,7 @@ export class GameService {
       const updatedGame = await this.updateGame(gameId, { word: word, category: category });
       return updatedGame;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -257,7 +257,7 @@ export class GameService {
       const updatedGame = await this.updateGame(gameId, { word: word, category: category });
       return updatedGame;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 
@@ -282,7 +282,7 @@ export class GameService {
 
       return result;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'GameService');
+      ExceptionBuilder.handleException(error, GameService.name);
     }
   }
 }

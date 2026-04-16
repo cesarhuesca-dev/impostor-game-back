@@ -30,10 +30,12 @@ export type I18nTranslations = {
             "fullGameRoom": string;
             "notStarted": string;
             "categoryEmpty": string;
+            "noWatchers": string;
         };
         "player": {
             "notFound": string;
             "alreadyExist": string;
+            "watcherExist": string;
         };
         "properties": {
             "id": string;

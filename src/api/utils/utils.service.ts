@@ -31,7 +31,7 @@ export class UtilsService {
 
       return true;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'UtilsService');
+      ExceptionBuilder.handleException(error, UtilsService.name);
     }
   }
 }

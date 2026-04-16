@@ -5,11 +5,13 @@
     "alreadyExist" : "La sala de juego ya existe",
     "fullGameRoom" : "La sala de juego esta llena",
     "notStarted" : "La partida aun no ha empezado",
-    "categoryEmpty" : "No se ha indicado categoría"
+    "categoryEmpty" : "No se ha indicado categoría",
+    "noWatchers" : "La partida no puede tener espectadores"
   },
   "player" : {
     "notFound" : "Jugador no encontrado",
-    "alreadyExist" : "El jugador con ese nombre ya existe"
+    "alreadyExist" : "El jugador con ese nombre ya existe",
+    "watcherExist" : "Ya hay un usuario espectador"
   },
   "properties" : {
     "id": "Identificador",

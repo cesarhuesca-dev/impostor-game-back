@@ -21,7 +21,7 @@ export class AuxiliarService {
 
       return categories;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'AuxiliarService');
+      ExceptionBuilder.handleException(error, AuxiliarService.name);
     }
   }
 }

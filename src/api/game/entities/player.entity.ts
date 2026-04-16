@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PlayerDto } from '../dto';
 import { Game } from './game.entity';
+import { UserRoles } from 'src/core/enum/roles.enum';
 
 @Entity({ name: 'player' })
 export class Player {
@@ -19,6 +20,14 @@ export class Player {
   @Column({ type: 'boolean', default: false })
   impostor!: boolean;
 
+  @Column({
+    type: 'enum',
+    array: true,
+    enum: UserRoles,
+    default: [UserRoles.PLAYER],
+  })
+  roles!: UserRoles[];
+
   @ManyToOne(() => Game, (game) => game.player, { eager: true, cascade: true, onDelete: 'CASCADE' })
   game!: Game;
 
@@ -29,6 +38,7 @@ export class Player {
       host: player.host,
       avatarImg: player.avatarImg,
       impostor: player.impostor,
+      roles: player.roles,
     };
 
     if (gameInfo) {

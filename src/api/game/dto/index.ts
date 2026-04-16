@@ -6,3 +6,4 @@ export * from './update-game.dto';
 export * from './verify-game.dto';
 export * from './player.dto';
 export * from './update-player.dto';
+export * from './create-join-watcher.dto';

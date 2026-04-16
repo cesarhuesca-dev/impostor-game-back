@@ -5,11 +5,13 @@
     "alreadyExist" : "Game already exist",
     "fullGameRoom" : "The room game is full",
     "notStarted" : "The game not started",
-    "categoryEmpty" : "The category is empty"
+    "categoryEmpty" : "The category is empty",
+    "noWatchers" : "No watchers access"
   },
   "player" : {
     "notFound" : "Player not found",
-    "alreadyExist" : "Player with this name already exist"
+    "alreadyExist" : "Player with this name already exist",
+    "watcherExist" : "Watcher already exist"
   },
   "properties" : {
     "id": "Identifier",

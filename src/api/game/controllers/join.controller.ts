@@ -1,7 +1,7 @@
 import { ResponseBuilder } from 'src/core/utils/response';
 import { JoinDto } from '../dto/join.dto';
 import { Controller, Post, Body } from '@nestjs/common';
-import { VerifyGameDto, CreateJoinGameDto } from '../dto';
+import { VerifyGameDto, CreateJoinGameDto, CreateJoinWatcherDto } from '../dto';
 import { JoinService } from '../services/join.service';
 
 @Controller('/game/join')
@@ -23,7 +23,13 @@ export class GameJoinController {
 
   @Post('/')
   async joinGame(@Body() createJoinGameDto: CreateJoinGameDto) {
-    const result = await this.joinService.joinGame(createJoinGameDto);
+    const result = await this.joinService.joinGamePlayer(createJoinGameDto);
+    return ResponseBuilder.build<JoinDto>(result);
+  }
+
+  @Post('/watcher')
+  async joinWatcher(@Body() createJoinWatcherDto: CreateJoinWatcherDto) {
+    const result = await this.joinService.joinGameWatcher(createJoinWatcherDto);
     return ResponseBuilder.build<JoinDto>(result);
   }
 

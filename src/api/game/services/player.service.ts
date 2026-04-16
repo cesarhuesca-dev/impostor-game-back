@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ExceptionBuilder } from 'src/core/utils/exception';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { ArrayContains, DeleteResult, Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
@@ -15,6 +15,7 @@ import { FilesService } from 'src/common/services/files.service';
 import { Game, Player } from '../entities';
 import { UpdatePlayerDto } from '../dto';
 import { GameService } from './game.service';
+import { UserRoles } from 'src/core/enum/roles.enum';
 
 @Injectable()
 export class PlayerService {
@@ -38,23 +39,26 @@ export class PlayerService {
 
       return player;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
   async findPlayersByGame(idGame: string): Promise<Player[]> {
     try {
       const players = await this.playerRepository.find({
-        where: { game: { id: idGame } },
+        where: {
+          game: { id: idGame },
+          roles: ArrayContains([UserRoles.PLAYER]),
+        },
       });
 
       return players;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
-  async createPlayer(playerName: string, gameId: string, host: boolean): Promise<Player> {
+  async createPlayer(playerName: string, gameId: string, host: boolean = false): Promise<Player> {
     try {
       const exist = await this.findOne(playerName);
 
@@ -62,17 +66,56 @@ export class PlayerService {
         throw new BadRequestException(this.i18n.t('entities.player.alreadyExist'));
       }
 
+      const roles = [UserRoles.PLAYER];
+
+      if (host) {
+        roles.push(UserRoles.MANAGER, UserRoles.WATCHER);
+      }
+
       const objCreate = this.playerRepository.create({
         name: playerName.trim(),
         host: host,
         game: await this.gameRepository.preload({ id: gameId }),
+        roles,
       });
 
       const player = await this.playerRepository.save(objCreate);
 
       return player;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
+    }
+  }
+
+  async createWatcher(gameId: string, host: boolean = false): Promise<Player> {
+    const topicWatcher = UserRoles.WATCHER;
+    const topicManager = UserRoles.MANAGER;
+
+    try {
+      const exist = await this.findOne(host ? topicManager : topicWatcher);
+
+      if (exist) {
+        throw new BadRequestException(this.i18n.t('entities.player.watcherExist'));
+      }
+
+      const roles = [UserRoles.WATCHER];
+
+      if (host) {
+        roles.push(UserRoles.MANAGER);
+      }
+
+      const objCreate = this.playerRepository.create({
+        name: host ? topicManager : topicWatcher,
+        host: host,
+        game: await this.gameRepository.preload({ id: gameId }),
+        roles: roles,
+      });
+
+      const player = await this.playerRepository.save(objCreate);
+
+      return player;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
@@ -94,7 +137,7 @@ export class PlayerService {
 
       return result;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
@@ -124,7 +167,7 @@ export class PlayerService {
 
       return result && result.affected && result.affected > 0 ? true : false;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
@@ -138,7 +181,7 @@ export class PlayerService {
 
       return this.filesService.getImage(player.game.id, player.id);
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
@@ -165,7 +208,7 @@ export class PlayerService {
 
       return result;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 
@@ -203,7 +246,7 @@ export class PlayerService {
 
       return true;
     } catch (error) {
-      ExceptionBuilder.handleException(error, 'PlayerService');
+      ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
 }
