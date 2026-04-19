@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
@@ -113,7 +113,7 @@ export class GameSocketService {
       const game = await this.gameService.findOne(idGame);
 
       if (!game) {
-        throw new Error(i18n?.t('entities.game.notFound'));
+        throw new NotFoundException(i18n?.t('entities.game.notFound'));
       }
 
       const players = await this.playerService.findPlayersByGame(idGame);
@@ -141,7 +141,7 @@ export class GameSocketService {
       const player = await this.playerService.findOne(playerId);
 
       if (!player) {
-        throw new Error(i18n?.t('entities.player.notFound'));
+        throw new NotFoundException(i18n?.t('entities.player.notFound'));
       }
 
       this.emitToRoom(

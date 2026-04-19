@@ -11,6 +11,7 @@ import {
   ParseFilePipeBuilder,
   BadRequestException,
   Res,
+  Header,
 } from '@nestjs/common';
 import { ResponseBuilder } from 'src/core/utils/response';
 import { I18nContext, I18nService } from 'nestjs-i18n';
@@ -35,6 +36,8 @@ export class GamePlayerController {
   //#region PLAYER NO AUTH
 
   @Get('/image/:id')
+  @Header('Access-Control-Allow-Origin', '*')
+  @Header('Cross-Origin-Resource-Policy', 'cross-origin')
   async getPlayerImage(@Res() res, @Param('id', ParseUUIDPipe) id: string) {
     const result = await this.playerService.getImage(id);
     if (!result) return res.status(400).json(ResponseBuilder.buildNotSuccess());
