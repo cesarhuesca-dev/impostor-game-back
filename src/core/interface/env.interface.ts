@@ -12,6 +12,8 @@ export interface EnvInterface {
   HOST_API: string;
   HOST_FRONT: string;
   SERVER_PORT: number;
+  THROTTLE_TTL: number;
+  THROTTLE_LIMIT: number;
   JWT_SECRET: string;
   WORD_API: string;
 }

@@ -6,6 +6,7 @@ import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 import { CustomExceptionFilter } from './core/filters/exception.filter';
 import { I18nCustomValidationExceptionFilter } from './core/filters/i18n-validation-exception.filter';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,7 @@ async function bootstrap(): Promise<void> {
   const env = envs();
 
   app.setGlobalPrefix('api');
+  app.use(helmet());
   app.use(cookieParser());
   app.useGlobalFilters(
     new CustomExceptionFilter(),

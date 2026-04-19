@@ -24,6 +24,8 @@ const envValidationSchema = () => {
 
     //SERVER
     SERVER_PORT: Joi.number().port().required(),
+    THROTTLE_TTL: Joi.number().required(),
+    THROTTLE_LIMIT: Joi.number().required(),
     HOST_API: Joi.string().required(),
     HOST_FRONT: Joi.string().required(),
     JWT_SECRET: Joi.string().required(),
@@ -45,6 +47,8 @@ const envZodSchema = z.object({
   DB_PORT: z.coerce.number(),
   //SERVER
   SERVER_PORT: z.coerce.number(),
+  THROTTLE_TTL: z.coerce.number(),
+  THROTTLE_LIMIT: z.coerce.number(),
   HOST_API: z.string(),
   HOST_FRONT: z.string(),
   JWT_SECRET: z.string(),
@@ -68,6 +72,8 @@ export const envs = (): EnvInterface => {
     DB_HOST: parsed.DB_HOST,
     DB_PORT: parsed.DB_PORT,
     SERVER_PORT: parsed.SERVER_PORT,
+    THROTTLE_TTL: parsed.THROTTLE_TTL,
+    THROTTLE_LIMIT: parsed.THROTTLE_LIMIT,
     HOST_API: parsed.HOST_API,
     HOST_FRONT: parsed.HOST_FRONT,
     JWT_SECRET: parsed.JWT_SECRET,
