@@ -113,7 +113,7 @@ export class GameController {
 
     if (!resultWord) return ResponseBuilder.buildNotSuccess();
 
-    await this.socketService.emitGameStatus(gameId);
+    await this.socketService.emitGameStatus(gameId, true);
     return ResponseBuilder.build<GameDto>(Game.toPlain(resultWord));
   }
 

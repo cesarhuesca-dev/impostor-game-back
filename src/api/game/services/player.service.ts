@@ -43,6 +43,21 @@ export class PlayerService {
     }
   }
 
+  async findHostGame(idGame: string): Promise<Player[]> {
+    try {
+      const players = await this.playerRepository.find({
+        where: {
+          host: true,
+          game: { id: idGame },
+        },
+      });
+
+      return players;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, PlayerService.name);
+    }
+  }
+
   async findPlayersByGame(idGame: string): Promise<Player[]> {
     try {
       const players = await this.playerRepository.find({

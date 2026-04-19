@@ -80,13 +80,22 @@ export class GamePlayerController {
     if (!result) return ResponseBuilder.buildNotSuccess();
 
     await this.gameSocketService.emitGameStatus(payload.gameId);
+    await this.gameSocketService.emitCloseGame(payload.gameId);
+    return ResponseBuilder.buildSuccess();
+  }
 
-    if (id === payload.playerId) {
-      await this.gameSocketService.emitCloseGame(payload.gameId);
-    } else {
-      await this.gameSocketService.emitPlayerBanned(payload.gameId, id);
-    }
+  @Auth()
+  @Delete('/:id/ban')
+  async banPlayer(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetRequestJwtPayload() payload: JwtPayloadInterface,
+  ) {
+    const result = await this.playerService.deletePlayer(id);
 
+    if (!result) return ResponseBuilder.buildNotSuccess();
+
+    await this.gameSocketService.emitGameStatus(payload.gameId);
+    await this.gameSocketService.emitPlayerBanned(payload.gameId, id);
     return ResponseBuilder.buildSuccess();
   }
 

@@ -209,7 +209,11 @@ export class GameService {
 
       word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
-      const updatedGame = await this.updateGame(gameId, { word: word, category: category });
+      const updatedGame = await this.updateGame(gameId, {
+        word: word,
+        category: category,
+        round: game.round + 1,
+      });
       return updatedGame;
     } catch (error) {
       ExceptionBuilder.handleException(error, GameService.name);

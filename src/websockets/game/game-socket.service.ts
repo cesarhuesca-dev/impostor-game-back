@@ -105,7 +105,7 @@ export class GameSocketService {
     return clients;
   }
 
-  async emitGameStatus(idGame: string) {
+  async emitGameStatus(idGame: string, newRound = false) {
     try {
       const i18n = I18nContext.current<I18nTranslations>();
 
@@ -121,7 +121,7 @@ export class GameSocketService {
         idGame,
         GameSocketTopic.PLAYER_MESSAGE,
         SocketResponseBuilder.build(
-          GameSocketTopic.UPDATE_GAME_STATUS,
+          newRound ? GameSocketTopic.NEW_ROUND_GAME : GameSocketTopic.UPDATE_GAME_STATUS,
           Game.toPlain(
             game!,
             players.map((x) => Player.toPlain(x, false)),
@@ -167,11 +167,15 @@ export class GameSocketService {
 
   async emitCloseGame(idGame: string) {
     try {
-      this.emitToRoom(
-        idGame,
-        GameSocketTopic.PLAYER_MESSAGE,
-        SocketResponseBuilder.build(GameSocketTopic.CLOSE_GAME),
-      );
+      const players = await this.playerService.findHostGame(idGame);
+
+      if (players.length === 0) {
+        this.emitToRoom(
+          idGame,
+          GameSocketTopic.PLAYER_MESSAGE,
+          SocketResponseBuilder.build(GameSocketTopic.CLOSE_GAME),
+        );
+      }
     } catch {
       /* empty */
     }
