@@ -24,4 +24,20 @@ export class AuxiliarService {
       ExceptionBuilder.handleException(error, AuxiliarService.name);
     }
   }
+
+  getLanguages(): ItemListInterface[] {
+    try {
+      const i18n = I18nContext.current<I18nTranslations>();
+      const i18nLang = (i18n?.lang as LanguagesSupported) ?? LanguagesSupported.en;
+
+      const languages: ItemListInterface[] = Object.keys(LanguagesSupported).map((lng) => ({
+        label: i18n?.t<any>(`languages.${lng}`, { lang: i18nLang }) ?? LanguagesSupported[lng],
+        value: LanguagesSupported[lng],
+      }));
+
+      return languages;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, AuxiliarService.name);
+    }
+  }
 }

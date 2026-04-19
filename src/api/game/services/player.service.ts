@@ -27,6 +27,9 @@ export class PlayerService {
     @Inject(forwardRef(() => GameService)) private readonly gameService: GameService,
   ) {}
 
+  private readonly usernameWatcher = UserRoles.WATCHER;
+  private readonly usernameManager = UserRoles.MANAGER;
+
   async findOne(term: string): Promise<Player | null> {
     try {
       let player: Player | null = null;
@@ -81,11 +84,14 @@ export class PlayerService {
         throw new BadRequestException(this.i18n.t('entities.player.alreadyExist'));
       }
 
-      const roles = [UserRoles.PLAYER];
-
-      if (host) {
-        roles.push(UserRoles.MANAGER, UserRoles.WATCHER);
+      if (
+        playerName.trim().toLocaleLowerCase() === this.usernameManager ||
+        playerName.trim().toLocaleLowerCase() === this.usernameWatcher
+      ) {
+        throw new BadRequestException(this.i18n.t('entities.player.playernameNotValid'));
       }
+
+      const roles = [UserRoles.PLAYER, ...(host ? [UserRoles.MANAGER, UserRoles.WATCHER] : [])];
 
       const objCreate = this.playerRepository.create({
         name: playerName.trim(),
@@ -103,24 +109,17 @@ export class PlayerService {
   }
 
   async createWatcher(gameId: string, host: boolean = false): Promise<Player> {
-    const topicWatcher = UserRoles.WATCHER;
-    const topicManager = UserRoles.MANAGER;
-
     try {
-      const exist = await this.findOne(host ? topicManager : topicWatcher);
+      const exist = await this.findOne(host ? this.usernameManager : this.usernameWatcher);
 
       if (exist) {
         throw new BadRequestException(this.i18n.t('entities.player.watcherExist'));
       }
 
-      const roles = [UserRoles.WATCHER];
-
-      if (host) {
-        roles.push(UserRoles.MANAGER);
-      }
+      const roles = [UserRoles.WATCHER, ...(host ? [UserRoles.MANAGER] : [])];
 
       const objCreate = this.playerRepository.create({
-        name: host ? topicManager : topicWatcher,
+        name: host ? this.usernameManager : this.usernameWatcher,
         host: host,
         game: await this.gameRepository.preload({ id: gameId }),
         roles: roles,

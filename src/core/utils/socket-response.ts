@@ -1,4 +1,4 @@
-import { GameSocketTopic } from 'src/websockets/enums/game-topics.enum';
+import { GameSocketTopic } from 'src/core/enum/game-topics.enum';
 import { SocketResponse } from '../interface/socket-response.interface';
 
 export class SocketResponseBuilder {

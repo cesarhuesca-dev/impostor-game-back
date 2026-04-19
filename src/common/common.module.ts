@@ -8,6 +8,14 @@ import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [JwtModule, HttpModule],
   providers: [AuthService, FilesService, JwtService, WordService],
-  exports: [CommonModule, JwtModule, HttpModule],
+  exports: [
+    CommonModule,
+    JwtModule,
+    HttpModule,
+    AuthService,
+    FilesService,
+    JwtService,
+    WordService,
+  ],
 })
 export class CommonModule {}

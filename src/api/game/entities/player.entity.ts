@@ -8,7 +8,7 @@ export class Player {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'text', unique: true })
+  @Column({ type: 'text' })
   name!: string;
 
   @Column({ type: 'boolean', default: false })

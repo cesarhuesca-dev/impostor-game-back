@@ -31,11 +31,15 @@ export type I18nTranslations = {
             "notStarted": string;
             "categoryEmpty": string;
             "noWatchers": string;
+            "noImpostors": string;
+            "noWord": string;
         };
         "player": {
             "notFound": string;
+            "found": string;
             "alreadyExist": string;
             "watcherExist": string;
+            "playernameNotValid": string;
         };
         "properties": {
             "id": string;
@@ -95,6 +99,14 @@ export type I18nTranslations = {
         "databaseError": string;
         "connectionError": string;
         "externalServiceError": string;
+        "websockets": {
+            "room-not-found": string;
+            "user-not-found": string;
+        };
+    };
+    "languages": {
+        "es": string;
+        "en": string;
     };
     "status-code": {
         "400": string;

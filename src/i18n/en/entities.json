@@ -6,12 +6,16 @@
     "fullGameRoom" : "The room game is full",
     "notStarted" : "The game not started",
     "categoryEmpty" : "The category is empty",
-    "noWatchers" : "No watchers access"
+    "noWatchers" : "No watchers access",
+    "noImpostors": "No impostors",
+    "noWord": "No word"
   },
   "player" : {
     "notFound" : "Player not found",
+    "found" : "Player found",
     "alreadyExist" : "Player with this name already exist",
-    "watcherExist" : "Watcher already exist"
+    "watcherExist" : "Watcher already exist",
+    "playernameNotValid" : "Name user not valid"
   },
   "properties" : {
     "id": "Identifier",

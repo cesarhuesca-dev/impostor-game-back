@@ -1,4 +1,10 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
 import { ExceptionBuilder } from 'src/core/utils/exception';
@@ -33,7 +39,7 @@ export class JoinService {
       const verified = await this.gameService.verifyJoinGame(roomName, roomPassword);
 
       if (!verified) {
-        throw new BadRequestException(this.i18n.t('entities.game.alreadyExist'));
+        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
       }
 
       const game = await this.gameService.findOne(roomName);
@@ -41,6 +47,9 @@ export class JoinService {
       if (!game) {
         throw new NotFoundException(this.i18n.t('entities.game.notFound'));
       }
+
+      if (game.roomPlayersJoined >= game.roomPlayers)
+        throw new UnauthorizedException(this.i18n.t('entities.game.fullGameRoom'));
 
       const player = await this.playerService.createPlayer(playerName, game.id, host);
 

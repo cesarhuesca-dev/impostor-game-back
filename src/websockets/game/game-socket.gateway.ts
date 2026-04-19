@@ -8,6 +8,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { GameSocketService } from './game-socket.service';
 import { AuthService } from 'src/common/services/auth.service';
+import { ExceptionWsBuilder } from 'src/core/utils/exception-ws';
 
 @WebSocketGateway({ cors: true, namespace: '/game' })
 export class GameSocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -37,21 +38,26 @@ export class GameSocketGateway implements OnGatewayInit, OnGatewayConnection, On
       await client.join(gameId);
       this.gameSocketService.registerClient(gameId, playerId, client);
       await this.gameSocketService.emitGameStatus(gameId);
-    } catch {
+    } catch (error) {
       client.disconnect();
+      ExceptionWsBuilder.handleException(error);
     }
   }
 
   handleDisconnect(client: Socket) {
-    const token = client.client.request.headers.authorization ?? '';
-    const tokenResult = this.authService.verifyJwtToken(token);
+    try {
+      const token = client.client.request.headers.authorization ?? '';
+      const tokenResult = this.authService.verifyJwtToken(token);
 
-    if (!tokenResult) {
-      return;
+      if (!tokenResult) {
+        return;
+      }
+
+      const { gameId, playerId } = tokenResult;
+
+      this.gameSocketService.disconnectClient(gameId, playerId);
+    } catch (error) {
+      ExceptionWsBuilder.handleException(error);
     }
-
-    const { gameId, playerId } = tokenResult;
-
-    this.gameSocketService.disconnectClient(gameId, playerId);
   }
 }

@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
-import { GameSocketTopic } from '../enums/game-topics.enum';
+import { GameSocketTopic } from '../../core/enum/game-topics.enum';
 import { Game, Player } from 'src/api/game/entities';
 import { SocketResponseBuilder } from 'src/core/utils/socket-response';
 import { GameService } from 'src/api/game/services/game.service';
 import { PlayerService } from 'src/api/game/services/player.service';
+import { ExceptionWsBuilder } from 'src/core/utils/exception-ws';
 
 interface ConnectedRooms {
   [id: string]: ConnectedClients[];
@@ -44,7 +45,7 @@ export class GameSocketService {
       const player = this.existPlayer(this.rooms[room], idPlayer);
 
       if (player) {
-        throw new Error(i18n?.t('entities.player.notFound'));
+        throw new Error(i18n?.t('entities.player.found'));
       }
 
       this.addClient(idGame, idPlayer, client);
@@ -76,13 +77,13 @@ export class GameSocketService {
     const room = this.existRoom(idGame);
 
     if (!room) {
-      throw new Error(i18n?.t('entities.player.notFound'));
+      throw new Error(i18n?.t('exceptions.websockets.room-not-found'));
     }
 
     const player = this.existPlayer(this.rooms[room], idPlayer);
 
     if (!player) {
-      throw new Error(i18n?.t('entities.player.notFound'));
+      throw new Error(i18n?.t('exceptions.websockets.user-not-found'));
     }
 
     player.socket.disconnect();
@@ -128,8 +129,8 @@ export class GameSocketService {
           ),
         ),
       );
-    } catch {
-      /* empty */
+    } catch (error) {
+      ExceptionWsBuilder.handleException(error);
     }
   }
 
@@ -148,8 +149,8 @@ export class GameSocketService {
         GameSocketTopic.PLAYER_MESSAGE,
         SocketResponseBuilder.build(GameSocketTopic.UPDATE_PLAYER_STATUS, Player.toPlain(player)),
       );
-    } catch {
-      /* empty */
+    } catch (error) {
+      ExceptionWsBuilder.handleException(error);
     }
   }
 
@@ -160,8 +161,8 @@ export class GameSocketService {
         GameSocketTopic.PLAYER_MESSAGE,
         SocketResponseBuilder.build(GameSocketTopic.PLAYER_ELIMINATED, idPlayer),
       );
-    } catch {
-      /* empty */
+    } catch (error) {
+      ExceptionWsBuilder.handleException(error);
     }
   }
 
@@ -176,8 +177,8 @@ export class GameSocketService {
           SocketResponseBuilder.build(GameSocketTopic.CLOSE_GAME),
         );
       }
-    } catch {
-      /* empty */
+    } catch (error) {
+      ExceptionWsBuilder.handleException(error);
     }
   }
 }

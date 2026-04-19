@@ -6,12 +6,16 @@
     "fullGameRoom" : "La sala de juego esta llena",
     "notStarted" : "La partida aun no ha empezado",
     "categoryEmpty" : "No se ha indicado categoría",
-    "noWatchers" : "La partida no puede tener espectadores"
+    "noWatchers" : "La partida no puede tener espectadores",
+    "noImpostors": "No hay impostores",
+    "noWord": "No hay palabra"
   },
   "player" : {
     "notFound" : "Jugador no encontrado",
+    "found" : "Jugador encontrado",
     "alreadyExist" : "El jugador con ese nombre ya existe",
-    "watcherExist" : "Ya hay un usuario espectador"
+    "watcherExist" : "Ya hay un usuario espectador",
+    "playernameNotValid" : "Nombre de jugador no válido"
   },
   "properties" : {
     "id": "Identificador",

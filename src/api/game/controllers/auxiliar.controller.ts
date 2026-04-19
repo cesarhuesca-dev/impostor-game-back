@@ -17,9 +17,20 @@ export class AuxiliarController {
     const categories = await this.auxiliarService.getCategories();
 
     if (!categories) {
-      throw new BadRequestException(this.i18n.t('entities.game.notFound'));
+      throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
     }
 
     return ResponseBuilder.build<ItemListInterface[]>(categories);
+  }
+
+  @Get('/languages')
+  async getLanguages() {
+    const languages = await this.auxiliarService.getLanguages();
+
+    if (!languages) {
+      throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+    }
+
+    return ResponseBuilder.build<ItemListInterface[]>(languages);
   }
 }

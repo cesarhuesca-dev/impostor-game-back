@@ -46,6 +46,11 @@
   "timeoutError": "La operación ha excedido el tiempo de espera",
   "databaseError": "Error en la base de datos",
   "connectionError": "Error de conexión",
-  "externalServiceError": "Error en un servicio externo"
+  "externalServiceError": "Error en un servicio externo",
+
+  "websockets" : {
+    "room-not-found" : "Sala no encontrada",
+    "user-not-found" : "Usuario no encontrado"
+  }
   
 }

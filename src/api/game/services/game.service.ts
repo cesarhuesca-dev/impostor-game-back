@@ -4,7 +4,6 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { I18nContext, I18nService } from 'nestjs-i18n';
@@ -58,16 +57,19 @@ export class GameService {
         throw new BadRequestException(this.i18n.t('entities.game.categoryEmpty'));
       }
 
-      const existGame = await this.gameRepository.findOneBy({ roomName: createGameDto.roomName });
+      const existGame = await this.findOne(createGameDto.roomName);
 
       if (existGame) {
         throw new BadRequestException(this.i18n.t('entities.game.alreadyExist'));
       }
 
       const salt = await bcrypt.genSalt();
-      createGameDto.roomPassword = await bcrypt.hash(createGameDto.roomPassword, salt);
 
-      const game = this.gameRepository.create(createGameDto);
+      const game = this.gameRepository.create({
+        ...createGameDto,
+        roomPassword: await bcrypt.hash(createGameDto.roomPassword, salt),
+        roomName: createGameDto.roomName.trim(),
+      });
 
       await this.gameRepository.save(game);
 
@@ -90,6 +92,7 @@ export class GameService {
       const updatedData = {
         ...game,
         ...updateGameDto,
+        roomName: updateGameDto.roomName ? updateGameDto.roomName.trim() : game.roomName,
         roomPassword: updateGameDto.roomPassword
           ? await bcrypt.hash(updateGameDto.roomPassword, salt)
           : game.roomPassword,
@@ -106,7 +109,12 @@ export class GameService {
 
   async deleteGame(id: string): Promise<boolean> {
     try {
-      await this.findOne(id);
+      const game = await this.findOne(id);
+
+      if (!game) {
+        throw new NotFoundException(this.i18n.t('entities.game.notFound'));
+      }
+
       await this.gameRepository.delete(id);
       this.filesService.deleteGameImages(id);
       return true;
@@ -129,8 +137,6 @@ export class GameService {
 
       if (!game || !isMatch)
         throw new BadRequestException(this.i18n.t('entities.game.invalidInputs'));
-      if (game.roomPlayersJoined >= game.roomPlayers)
-        throw new UnauthorizedException(this.i18n.t('entities.game.fullGameRoom'));
 
       return true;
     } catch (error) {
@@ -186,7 +192,7 @@ export class GameService {
       const impostor = await this.playerService.newRoundImpostor(gameId, multipleImpostors);
 
       if (!impostor) {
-        throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+        throw new BadRequestException(this.i18n.t('entities.game.noImpostors'));
       }
 
       //Conseguir una palabra y categoria
@@ -201,7 +207,7 @@ export class GameService {
         const randomWord = await this.wordService.getRandomWord(i18nLang, category!);
 
         if (!randomWord) {
-          throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+          throw new BadRequestException(this.i18n.t('entities.game.noWord'));
         }
 
         word = randomWord.word;
@@ -250,7 +256,7 @@ export class GameService {
         const randomWord = await this.wordService.getRandomWord(i18nLang, category!);
 
         if (!randomWord) {
-          throw new BadRequestException(this.i18n.t('exceptions.badRequest'));
+          throw new BadRequestException(this.i18n.t('entities.game.noWord'));
         }
 
         word = randomWord.word;
@@ -276,7 +282,7 @@ export class GameService {
       const newCategory = WordCategories[category];
 
       if (!newCategory) {
-        throw new NotFoundException(this.i18n.t('exceptions.badRequest'));
+        throw new NotFoundException(this.i18n.t('entities.game.categoryEmpty'));
       }
 
       const result = await this.updateGame(gameId, {
