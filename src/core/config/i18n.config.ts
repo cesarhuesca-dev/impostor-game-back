@@ -8,21 +8,27 @@ import {
 import { AcceptLanguageResolver, HeaderResolver, QueryResolver } from 'nestjs-i18n';
 
 import * as path from 'path';
-import { EnvInterface } from '../interface/env.interface';
+import { EnvInterface, EnvironmentMode } from '../interface/env.interface';
 import { Settings } from '../interface/settings.interface';
 import { Request } from 'express';
 import { ExecutionContext } from '@nestjs/common';
 
 const i18nSchema = (configService: ConfigService<EnvInterface>): I18nOptionsWithoutResolvers => {
-  return {
+
+  const objI18n: I18nOptionsWithoutResolvers = {
     fallbackLanguage: configService.get('FALLBACK_LANGUAGE')!,
     loaderOptions: {
       path: path.join(__dirname, '/../../i18n/'),
       watch: true,
       includeSubfolders: true,
     },
-    typesOutputPath: path.join(__dirname, '../../../src/i18n/generated/i18n.generated.ts'),
   };
+
+  if(configService.get('ENVIRONMENT')! === EnvironmentMode.Development){
+    objI18n.typesOutputPath = path.join(__dirname, '../../../src/i18n/generated/i18n.generated');
+  }
+
+  return objI18n;
 };
 
 class CustomCookieResolver implements I18nResolver {

@@ -16,8 +16,9 @@ const databaseSchema = (configService: ConfigService<EnvInterface>): TypeOrmModu
       username: configService.get('DB_USER'),
       password: configService.get('DB_PASSWORD'),
       synchronize: configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true,
-      autoLoadEntities:
-        configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true,
+      autoLoadEntities: true,
+        // configService.get('ENVIRONMENT') === EnvironmentMode.Production ? false : true,
+      logging: configService.get('ENVIRONMENT') !== EnvironmentMode.Production,
     };
   } else {
     logger.log('Database sqlite selected');
