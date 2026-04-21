@@ -1,4 +1,8 @@
 export enum LanguagesSupported {
-  es = 'es',
   en = 'en',
+  es = 'es',
+  de = 'de',
+  fr = 'fr',
+  it = 'it',
+  pt = 'pt-r',
 }

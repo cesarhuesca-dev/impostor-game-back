@@ -1,0 +1,17 @@
+{
+  "400": "Requête incorrecte",
+  "401": "Non autorisé",
+  "403": "Interdit",
+  "404": "Non trouvé",
+  "405": "Méthode non autorisée",
+  "408": "Délai dépassé",
+  "409": "Conflit",
+  "413": "Charge utile trop volumineuse",
+  "415": "Type de média non supporté",
+  "422": "Entité non traitable",
+  "429": "Trop de requêtes",
+  "500": "Erreur interne du serveur",
+  "502": "Mauvaise passerelle",
+  "503": "Service indisponible",
+  "504": "Délai de la passerelle dépassé"
+}

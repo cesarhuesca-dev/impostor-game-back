@@ -1,0 +1,55 @@
+{
+  "badRequest": "Requête incorrecte",
+  "unauthorized": "Non autorisé",
+  "paymentRequired": "Paiement requis",
+  "forbidden": "Accès interdit",
+  "notFound": "Ressource introuvable",
+  "methodNotAllowed": "Méthode non autorisée",
+  "notAcceptable": "Requête non acceptable",
+  "proxyAuthenticationRequired": "Authentification proxy requise",
+  "requestTimeout": "Délai de la requête dépassé",
+  "conflict": "Conflit dans la requête",
+  "gone": "La ressource n'est plus disponible",
+  "lengthRequired": "Longueur du contenu requise",
+  "preconditionFailed": "Précondition échouée",
+  "payloadTooLarge": "Requête trop volumineuse",
+  "uriTooLong": "URI trop longue",
+  "unsupportedMediaType": "Type de média non supporté",
+  "requestedRangeNotSatisfiable": "Plage demandée non satisfaisante",
+  "expectationFailed": "L'attente n'a pas pu être satisfaite",
+  "iAmATeapot": "Je suis une théière ☕",
+
+  "unprocessableEntity": "Entité non traitable",
+  "tooEarly": "Trop tôt",
+  "upgradeRequired": "Mise à niveau requise",
+  "preconditionRequired": "Précondition requise",
+  "tooManyRequests": "Trop de requêtes",
+  "requestHeaderFieldsTooLarge": "En-têtes de requête trop volumineux",
+  "unavailableForLegalReasons": "Indisponible pour des raisons légales",
+
+  "internalServerError": "Erreur interne du serveur",
+  "notImplemented": "Non implémenté",
+  "badGateway": "Mauvaise passerelle",
+  "serviceUnavailable": "Service indisponible",
+  "gatewayTimeout": "Délai de la passerelle dépassé",
+  "httpVersionNotSupported": "Version HTTP non supportée",
+  "variantAlsoNegotiates": "La variante négocie également",
+  "insufficientStorage": "Stockage insuffisant",
+  "loopDetected": "Boucle détectée",
+  "notExtended": "Non étendu",
+  "networkAuthenticationRequired": "Authentification réseau requise",
+
+  "default": "Une erreur inattendue est survenue",
+  "validationError": "Erreur de validation",
+  "unknownError": "Erreur inconnue",
+
+  "timeoutError": "L'opération a dépassé le délai d'attente",
+  "databaseError": "Erreur de base de données",
+  "connectionError": "Erreur de connexion",
+  "externalServiceError": "Erreur d'un service externe",
+
+  "websockets" : {
+    "room-not-found" : "Salle introuvable",
+    "user-not-found" : "Utilisateur introuvable"
+  }
+}

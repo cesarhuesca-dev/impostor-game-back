@@ -1,0 +1,71 @@
+{
+  "isDefined": "{property} muss definiert sein",
+  "isOptional": "{property} ist optional",
+
+  "isEmpty": "{property} muss leer sein",
+  "isNotEmpty": "{property} darf nicht leer sein",
+
+  "isString": "{property} muss ein Text sein",
+  "isNumber": "{property} muss eine Zahl sein",
+  "isInt": "{property} muss eine ganze Zahl sein",
+  "isBoolean": "{property} muss ein boolescher Wert sein",
+  "isDate": "{property} muss ein gültiges Datum sein",
+  "isArray": "{property} muss ein Array sein",
+  "isObject": "{property} muss ein Objekt sein",
+
+  "isEmail": "{property} muss eine gültige E-Mail sein",
+  "isUrl": "{property} muss eine gültige URL sein",
+  "isUUID": "{property} muss eine gültige UUID sein",
+  "isIP": "{property} muss eine gültige IP-Adresse sein",
+
+  "isEnum": "{property} muss ein gültiger Wert sein",
+
+  "min": "{property} darf nicht kleiner als {constraints.0} sein",
+  "max": "{property} darf nicht größer als {constraints.0} sein",
+
+  "minLength": "{property} muss mindestens {constraints.0} Zeichen lang sein",
+  "maxLength": "{property} darf höchstens {constraints.0} Zeichen lang sein",
+  "length": "{property} muss zwischen {constraints.0} und {constraints.1} Zeichen lang sein",
+
+  "matches": "{property} muss dem Muster {constraints.0} entsprechen",
+  "notMatches": "{property} darf dem Muster {constraints.0} nicht entsprechen",
+
+  "contains": "{property} muss {constraints.0} enthalten",
+  "notContains": "{property} darf {constraints.0} nicht enthalten",
+
+  "isIn": "{property} muss einer der folgenden Werte sein: {constraints.0}",
+  "isNotIn": "{property} darf keiner der folgenden Werte sein: {constraints.0}",
+
+  "isPositive": "{property} muss eine positive Zahl sein",
+  "isNegative": "{property} muss eine negative Zahl sein",
+
+  "isDivisibleBy": "{property} muss durch {constraints.0} teilbar sein",
+
+  "arrayContains": "{property} muss die Werte {constraints.0} enthalten",
+  "arrayNotContains": "{property} darf die Werte {constraints.0} nicht enthalten",
+  "arrayNotEmpty": "{property} darf nicht leer sein",
+  "arrayMinSize": "{property} muss mindestens {constraints.0} Elemente enthalten",
+  "arrayMaxSize": "{property} darf höchstens {constraints.0} Elemente enthalten",
+
+  "isDateString": "{property} muss ein gültiges Datum im ISO-8601-Format sein",
+  "isJSON": "{property} muss ein gültiges JSON sein",
+
+  "isLowercase": "{property} muss in Kleinbuchstaben sein",
+  "isUppercase": "{property} muss in Großbuchstaben sein",
+
+  "isMobilePhone": "{property} muss eine gültige Telefonnummer sein",
+  "isPostalCode": "{property} muss eine gültige Postleitzahl sein",
+  "isCreditCard": "{property} muss eine gültige Kreditkartennummer sein",
+
+  "isMongoId": "{property} muss eine gültige MongoDB-ID sein",
+
+  "validateNested": "die verschachtelte Eigenschaft {property} muss ein gültiges Objekt oder Array sein",
+
+  "customValidation": "{property} ist ungültig",
+  "unknownValue": "ein unbekannter Wert wurde angegeben",
+
+  "whitelistValidation" : "{property} ist nicht erlaubt",
+
+  "fileRequired" : "Die Datei ist erforderlich",
+  "fileValidation" : "Die Datei ist ungültig"
+}

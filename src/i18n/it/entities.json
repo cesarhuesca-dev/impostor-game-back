@@ -1,0 +1,32 @@
+{
+  "game" : {
+    "notFound" : "Stanza di gioco non trovata",
+    "invalidInputs" : "Input non validi",
+    "alreadyExist" : "La stanza di gioco esiste già",
+    "fullGameRoom" : "La stanza di gioco è piena",
+    "notStarted" : "La partita non è ancora iniziata",
+    "categoryEmpty" : "Nessuna categoria selezionata",
+    "noWatchers" : "La partita non può avere spettatori",
+    "noImpostors": "Nessun impostore",
+    "noWord": "Nessuna parola"
+  },
+  "player" : {
+    "notFound" : "Giocatore non trovato",
+    "found" : "Giocatore trovato",
+    "alreadyExist" : "Esiste già un giocatore con questo nome",
+    "watcherExist" : "Esiste già uno spettatore",
+    "playernameNotValid" : "Nome giocatore non valido"
+  },
+  "properties" : {
+    "id": "ID",
+    "roomName": "Stanza di gioco",
+    "roomPassword": "Password della stanza",
+    "roomPlayers": "Giocatori nella stanza",
+    "customWords": "Parole personalizzate",
+    "specificCategory": "Categoria specifica",
+    "category": "Categoria",
+    "multipleImpostors": "Impostori multipli",
+    "overlay": "Overlay"
+  },
+  "unexpected-error" : "Errore imprevisto"
+}

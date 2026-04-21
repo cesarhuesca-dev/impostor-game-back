@@ -1,0 +1,17 @@
+{
+  "400": "Richiesta non valida",
+  "401": "Non autorizzato",
+  "403": "Vietato",
+  "404": "Non trovato",
+  "405": "Metodo non consentito",
+  "408": "Timeout",
+  "409": "Conflitto",
+  "413": "Richiesta troppo grande",
+  "415": "Tipo di contenuto non supportato",
+  "422": "Entità non elaborabile",
+  "429": "Troppe richieste",
+  "500": "Errore interno del server",
+  "502": "Gateway non valido",
+  "503": "Servizio non disponibile",
+  "504": "Timeout del gateway"
+}

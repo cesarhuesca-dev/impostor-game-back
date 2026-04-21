@@ -1,0 +1,55 @@
+{
+  "badRequest": "Richiesta non valida",
+  "unauthorized": "Non autorizzato",
+  "paymentRequired": "Pagamento richiesto",
+  "forbidden": "Accesso vietato",
+  "notFound": "Risorsa non trovata",
+  "methodNotAllowed": "Metodo non consentito",
+  "notAcceptable": "Richiesta non accettabile",
+  "proxyAuthenticationRequired": "Autenticazione proxy richiesta",
+  "requestTimeout": "Timeout della richiesta",
+  "conflict": "Conflitto nella richiesta",
+  "gone": "La risorsa non è più disponibile",
+  "lengthRequired": "Lunghezza del contenuto richiesta",
+  "preconditionFailed": "Precondizione fallita",
+  "payloadTooLarge": "Richiesta troppo grande",
+  "uriTooLong": "URI troppo lunga",
+  "unsupportedMediaType": "Tipo di contenuto non supportato",
+  "requestedRangeNotSatisfiable": "Intervallo richiesto non valido",
+  "expectationFailed": "Aspettativa non soddisfatta",
+  "iAmATeapot": "Sono una teiera ☕",
+
+  "unprocessableEntity": "Entità non elaborabile",
+  "tooEarly": "Troppo presto",
+  "upgradeRequired": "Aggiornamento richiesto",
+  "preconditionRequired": "Precondizione richiesta",
+  "tooManyRequests": "Troppe richieste",
+  "requestHeaderFieldsTooLarge": "Header della richiesta troppo grandi",
+  "unavailableForLegalReasons": "Non disponibile per motivi legali",
+
+  "internalServerError": "Errore interno del server",
+  "notImplemented": "Non implementato",
+  "badGateway": "Gateway non valido",
+  "serviceUnavailable": "Servizio non disponibile",
+  "gatewayTimeout": "Timeout del gateway",
+  "httpVersionNotSupported": "Versione HTTP non supportata",
+  "variantAlsoNegotiates": "La variante negozia anch'essa",
+  "insufficientStorage": "Spazio di archiviazione insufficiente",
+  "loopDetected": "Loop rilevato",
+  "notExtended": "Non esteso",
+  "networkAuthenticationRequired": "Autenticazione di rete richiesta",
+
+  "default": "Si è verificato un errore imprevisto",
+  "validationError": "Errore di validazione",
+  "unknownError": "Errore sconosciuto",
+
+  "timeoutError": "L'operazione ha superato il tempo limite",
+  "databaseError": "Errore del database",
+  "connectionError": "Errore di connessione",
+  "externalServiceError": "Errore in un servizio esterno",
+
+  "websockets" : {
+    "room-not-found" : "Stanza non trovata",
+    "user-not-found" : "Utente non trovato"
+  }
+}

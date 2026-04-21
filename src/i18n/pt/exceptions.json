@@ -1,0 +1,55 @@
+{
+  "badRequest": "Requisição inválida",
+  "unauthorized": "Não autorizado",
+  "paymentRequired": "Pagamento necessário",
+  "forbidden": "Acesso proibido",
+  "notFound": "Recurso não encontrado",
+  "methodNotAllowed": "Método não permitido",
+  "notAcceptable": "Requisição não aceitável",
+  "proxyAuthenticationRequired": "Autenticação de proxy necessária",
+  "requestTimeout": "Tempo de requisição esgotado",
+  "conflict": "Conflito na requisição",
+  "gone": "O recurso não está mais disponível",
+  "lengthRequired": "Comprimento do conteúdo necessário",
+  "preconditionFailed": "Pré-condição falhou",
+  "payloadTooLarge": "Requisição muito grande",
+  "uriTooLong": "URI muito longa",
+  "unsupportedMediaType": "Tipo de mídia não suportado",
+  "requestedRangeNotSatisfiable": "Intervalo solicitado inválido",
+  "expectationFailed": "A expectativa não pôde ser atendida",
+  "iAmATeapot": "Sou uma chaleira ☕",
+
+  "unprocessableEntity": "Entidade não processável",
+  "tooEarly": "Muito cedo",
+  "upgradeRequired": "Atualização necessária",
+  "preconditionRequired": "Pré-condição necessária",
+  "tooManyRequests": "Muitas requisições",
+  "requestHeaderFieldsTooLarge": "Cabeçalhos muito grandes",
+  "unavailableForLegalReasons": "Indisponível por razões legais",
+
+  "internalServerError": "Erro interno do servidor",
+  "notImplemented": "Não implementado",
+  "badGateway": "Gateway inválido",
+  "serviceUnavailable": "Serviço indisponível",
+  "gatewayTimeout": "Tempo do gateway esgotado",
+  "httpVersionNotSupported": "Versão HTTP não suportada",
+  "variantAlsoNegotiates": "A variante também negocia",
+  "insufficientStorage": "Armazenamento insuficiente",
+  "loopDetected": "Loop detectado",
+  "notExtended": "Não estendido",
+  "networkAuthenticationRequired": "Autenticação de rede necessária",
+
+  "default": "Ocorreu um erro inesperado",
+  "validationError": "Erro de validação",
+  "unknownError": "Erro desconhecido",
+
+  "timeoutError": "A operação excedeu o tempo limite",
+  "databaseError": "Erro no banco de dados",
+  "connectionError": "Erro de conexão",
+  "externalServiceError": "Erro em serviço externo",
+
+  "websockets" : {
+    "room-not-found" : "Sala não encontrada",
+    "user-not-found" : "Usuário não encontrado"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "400": "Ungültige Anfrage",
+  "401": "Nicht autorisiert",
+  "403": "Verboten",
+  "404": "Nicht gefunden",
+  "405": "Methode nicht erlaubt",
+  "408": "Zeitüberschreitung",
+  "409": "Konflikt",
+  "413": "Anfrage zu groß",
+  "415": "Nicht unterstützter Medientyp",
+  "422": "Nicht verarbeitbare Entität",
+  "429": "Zu viele Anfragen",
+  "500": "Interner Serverfehler",
+  "502": "Fehlerhaftes Gateway",
+  "503": "Dienst nicht verfügbar",
+  "504": "Gateway-Zeitüberschreitung"
+}

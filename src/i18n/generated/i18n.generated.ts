@@ -107,6 +107,10 @@ export type I18nTranslations = {
     "languages": {
         "es": string;
         "en": string;
+        "de": string;
+        "fr": string;
+        "it": string;
+        "pt": string;
     };
     "status-code": {
         "400": string;

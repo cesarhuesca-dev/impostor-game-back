@@ -1,0 +1,32 @@
+{
+  "game" : {
+    "notFound" : "Spielraum nicht gefunden",
+    "invalidInputs" : "Ungültige Eingaben",
+    "alreadyExist" : "Der Spielraum existiert bereits",
+    "fullGameRoom" : "Der Spielraum ist voll",
+    "notStarted" : "Das Spiel hat noch nicht begonnen",
+    "categoryEmpty" : "Keine Kategorie ausgewählt",
+    "noWatchers" : "Das Spiel kann keine Zuschauer haben",
+    "noImpostors": "Keine Betrüger vorhanden",
+    "noWord": "Kein Wort vorhanden"
+  },
+  "player" : {
+    "notFound" : "Spieler nicht gefunden",
+    "found" : "Spieler gefunden",
+    "alreadyExist" : "Ein Spieler mit diesem Namen existiert bereits",
+    "watcherExist" : "Es gibt bereits einen Zuschauer",
+    "playernameNotValid" : "Ungültiger Spielername"
+  },
+  "properties" : {
+    "id": "ID",
+    "roomName": "Spielraum",
+    "roomPassword": "Raum-Passwort",
+    "roomPlayers": "Spieler im Raum",
+    "customWords": "Benutzerdefinierte Wörter",
+    "specificCategory": "Spezifische Kategorie",
+    "category": "Kategorie",
+    "multipleImpostors": "Mehrere Betrüger",
+    "overlay": "Overlay"
+  },
+  "unexpected-error" : "Unerwarteter Fehler"
+}

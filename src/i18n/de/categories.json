@@ -1,0 +1,17 @@
+{
+  "all" : "Alle",
+  "wordle" : "Wordle",
+  "brainrot" : "Brainrot",
+  "countries" : "Länder",
+  "capitals_of_countries" : "Hauptstädte der Länder",
+  "sports" : "Sportarten",
+  "animals" : "Tiere",
+  "birds" : "Vögel",
+  "softwares" : "Software",
+  "programming_languages" : "Programmiersprachen",
+  "games" : "Spiele",
+  "pc_games" : "PC-Spiele",
+  "mobile_games" : "Mobile Spiele",
+  "console_games" : "Konsolenspiele",
+  "companies" : "Unternehmen"
+}
