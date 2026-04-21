@@ -14,7 +14,6 @@ import { Request } from 'express';
 import { ExecutionContext } from '@nestjs/common';
 
 const i18nSchema = (configService: ConfigService<EnvInterface>): I18nOptionsWithoutResolvers => {
-
   const objI18n: I18nOptionsWithoutResolvers = {
     fallbackLanguage: configService.get('FALLBACK_LANGUAGE')!,
     loaderOptions: {
@@ -24,8 +23,8 @@ const i18nSchema = (configService: ConfigService<EnvInterface>): I18nOptionsWith
     },
   };
 
-  if(configService.get('ENVIRONMENT')! === EnvironmentMode.Development){
-    objI18n.typesOutputPath = path.join(__dirname, '../../../src/i18n/generated/i18n.generated');
+  if (configService.get('ENVIRONMENT')! === EnvironmentMode.Development) {
+    objI18n.typesOutputPath = path.join(__dirname, '../../../src/i18n/generated/i18n.generated.ts');
   }
 
   return objI18n;

@@ -8,6 +8,7 @@ import { SocketResponseBuilder } from 'src/core/utils/socket-response';
 import { GameService } from 'src/api/game/services/game.service';
 import { PlayerService } from 'src/api/game/services/player.service';
 import { ExceptionWsBuilder } from 'src/core/utils/exception-ws';
+import { LanguagesSupported } from 'src/core/enum/languages.enum';
 
 interface ConnectedRooms {
   [id: string]: ConnectedClients[];
@@ -113,7 +114,9 @@ export class GameSocketService {
       const game = await this.gameService.findOne(idGame);
 
       if (!game) {
-        throw new NotFoundException(i18n?.t('entities.game.notFound'));
+        throw new NotFoundException(
+          i18n?.t('entities.game.notFound', { lang: LanguagesSupported.en }),
+        );
       }
 
       const players = await this.playerService.findPlayersByGame(idGame);
@@ -141,7 +144,9 @@ export class GameSocketService {
       const player = await this.playerService.findOne(playerId);
 
       if (!player) {
-        throw new NotFoundException(i18n?.t('entities.player.notFound'));
+        throw new NotFoundException(
+          i18n?.t('entities.player.notFound', { lang: LanguagesSupported.en }),
+        );
       }
 
       this.emitToRoom(

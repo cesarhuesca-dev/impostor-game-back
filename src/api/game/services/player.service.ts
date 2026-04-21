@@ -78,11 +78,10 @@ export class PlayerService {
 
   async createPlayer(playerName: string, gameId: string, host: boolean = false): Promise<Player> {
     try {
-      const exist = await this.findOne(playerName);
-
-      if (exist) {
-        throw new BadRequestException(this.i18n.t('entities.player.alreadyExist'));
-      }
+      // const exist = await this.findOne(playerName);
+      // if (exist) {
+      //   throw new BadRequestException(this.i18n.t('entities.player.alreadyExist'));
+      // }
 
       if (
         playerName.trim().toLocaleLowerCase() === this.usernameManager ||

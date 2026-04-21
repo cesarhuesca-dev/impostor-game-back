@@ -17,9 +17,6 @@ export class CustomExceptionFilter implements ExceptionFilter {
       statusCode: number;
     } = exception.getResponse();
 
-    // console.log(exception)
-
-    //!TODO INTENTAR TRADUCIR ESTE ERROR CUANDO NO SE PUEDE CONTROLAR CON CONTEXTO DE TRADUCCION
     const json: ApiResponse<any> = {
       status: errorResposne.statusCode,
       error: errorResposne.error,
