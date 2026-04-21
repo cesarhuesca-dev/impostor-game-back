@@ -4,5 +4,5 @@ export enum LanguagesSupported {
   de = 'de',
   fr = 'fr',
   it = 'it',
-  pt = 'pt-r',
+  pt = 'pt',
 }

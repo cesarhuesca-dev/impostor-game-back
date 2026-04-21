@@ -36,6 +36,10 @@ export class WordService {
     const maxRetries = 2;
     const ogLang = language;
 
+    if (language === LanguagesSupported.pt) {
+      language = 'pt-r' as LanguagesSupported;
+    }
+
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         const res = await firstValueFrom(
