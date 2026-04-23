@@ -1,10 +1,10 @@
 {
-  "name": "game-impostor",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "name": "impostor-game-backend",
+  "version": "1.0.0",
+  "description": "Imposotr Game | Multiplayer party game of words and deception - Backend",
+  "author": "Cesar Huesca <cesarhuesca.dev@gmail.com>",
+  "license": "MIT",
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
