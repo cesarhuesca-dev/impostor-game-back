@@ -1,7 +1,7 @@
 {
   "name": "impostor-game-backend",
   "version": "1.0.0",
-  "description": "Imposotr Game | Multiplayer party game of words and deception - Backend",
+  "description": "Impostor Game | Multiplayer party game of words and deception - Backend",
   "author": "Cesar Huesca <cesarhuesca.dev@gmail.com>",
   "license": "MIT",
   "private": true,
