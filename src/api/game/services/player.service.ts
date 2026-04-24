@@ -262,4 +262,43 @@ export class PlayerService {
       ExceptionBuilder.handleException(error, PlayerService.name);
     }
   }
+
+  async getNextStartingPlayer(gameId: string): Promise<Player> {
+    try {
+      const players = await this.findPlayersByGame(gameId);
+
+      const validPlayers = players.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+      if (!validPlayers.length) {
+        throw new BadRequestException(this.i18n.t('entities.game.noStarterPlayer'));
+      }
+
+      const game = { ...validPlayers[0].game };
+
+      let nextPlayer: Player;
+
+      // Primera ronda o no existe
+      if (!game.starterRoundPlayer) {
+        const randomIndex = Math.floor(Math.random() * validPlayers.length);
+        nextPlayer = validPlayers[randomIndex];
+      } else {
+        const currentIndex = validPlayers.findIndex((p) => p.name === game.starterRoundPlayer);
+
+        if (currentIndex === -1) {
+          nextPlayer = validPlayers[0];
+        } else {
+          const nextIndex = (currentIndex + 1) % validPlayers.length;
+          nextPlayer = validPlayers[nextIndex];
+        }
+      }
+
+      if (!nextPlayer) {
+        throw new BadRequestException(this.i18n.t('entities.game.noWord'));
+      }
+
+      return nextPlayer;
+    } catch (error) {
+      ExceptionBuilder.handleException(error, PlayerService.name);
+    }
+  }
 }

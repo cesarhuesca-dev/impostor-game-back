@@ -8,7 +8,8 @@
     "categoryEmpty" : "No se ha indicado categoría",
     "noWatchers" : "La partida no puede tener espectadores",
     "noImpostors": "No hay impostores",
-    "noWord": "No hay palabra"
+    "noWord": "No hay palabra",
+    "noStarterPlayer": "No hay jugador inicial"
   },
   "player" : {
     "notFound" : "Jugador no encontrado",

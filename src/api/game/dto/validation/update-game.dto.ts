@@ -34,4 +34,8 @@ export class UpdateGameDto extends PartialType(OmitType(CreateGameDto, ['categor
   @IsString({ message: i18nValidationMessage<I18nTranslations>('validation.isString') })
   @IsOptional()
   category?: string | null;
+
+  @IsString({ message: i18nValidationMessage<I18nTranslations>('validation.isString') })
+  @IsOptional()
+  starterRoundPlayer?: string | null;
 }

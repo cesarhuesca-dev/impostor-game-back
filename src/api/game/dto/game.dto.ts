@@ -13,6 +13,7 @@ export interface GameDto {
   gameStarted: boolean;
   roomPlayersJoined: number;
   round: number;
+  starterRoundPlayer: string | null;
   word: string | null;
   players?: PlayerDto[];
 }

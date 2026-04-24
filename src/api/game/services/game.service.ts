@@ -160,6 +160,7 @@ export class GameService {
         round: 0,
         category: null,
         word: null,
+        starterRoundPlayer: null,
       });
       return game;
     } catch (error) {
@@ -215,10 +216,13 @@ export class GameService {
 
       word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
+      const starterRoundPlayer = await this.playerService.getNextStartingPlayer(gameId);
+
       const updatedGame = await this.updateGame(gameId, {
         word: word,
         category: category,
         round: game.round + 1,
+        starterRoundPlayer: starterRoundPlayer.name,
       });
       return updatedGame;
     } catch (error) {

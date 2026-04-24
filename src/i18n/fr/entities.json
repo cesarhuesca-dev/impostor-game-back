@@ -8,7 +8,8 @@
     "categoryEmpty" : "Aucune catégorie sélectionnée",
     "noWatchers" : "La partie ne peut pas avoir de spectateurs",
     "noImpostors": "Aucun imposteur",
-    "noWord": "Aucun mot"
+    "noWord": "Aucun mot",
+    "noStarterPlayer": "Pas de joueur débutant"
   },
   "player" : {
     "notFound" : "Joueur introuvable",

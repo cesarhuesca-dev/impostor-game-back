@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { PlayerDto } from '../dto';
 import { Game } from './game.entity';
 import { UserRoles } from 'src/core/enum/roles.enum';
@@ -30,6 +37,12 @@ export class Player {
 
   @ManyToOne(() => Game, (game) => game.player, { eager: true, cascade: true, onDelete: 'CASCADE' })
   game!: Game;
+
+  @CreateDateColumn({})
+  createdAt!: Date;
+
+  @UpdateDateColumn({})
+  updatedAt!: Date;
 
   static toPlain(player: Player, gameInfo: boolean = true): PlayerDto {
     const obj: PlayerDto = {

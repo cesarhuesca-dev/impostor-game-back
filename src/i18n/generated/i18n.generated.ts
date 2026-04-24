@@ -33,6 +33,7 @@ export type I18nTranslations = {
             "noWatchers": string;
             "noImpostors": string;
             "noWord": string;
+            "noStarterPlayer": string;
         };
         "player": {
             "notFound": string;

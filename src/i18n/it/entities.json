@@ -8,7 +8,8 @@
     "categoryEmpty" : "Nessuna categoria selezionata",
     "noWatchers" : "La partita non può avere spettatori",
     "noImpostors": "Nessun impostore",
-    "noWord": "Nessuna parola"
+    "noWord": "Nessuna parola",
+    "noStarterPlayer": "Nessun giocatore che inizia il turno"
   },
   "player" : {
     "notFound" : "Giocatore non trovato",

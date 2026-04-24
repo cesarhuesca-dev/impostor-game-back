@@ -50,6 +50,9 @@ export class Game {
   @Column({ type: 'integer', default: 0 })
   round!: number;
 
+  @Column({ type: 'text', nullable: true, default: null })
+  starterRoundPlayer!: string | null;
+
   @Column({ type: 'boolean', default: false })
   gameStarted!: boolean;
 
@@ -76,6 +79,7 @@ export class Game {
       round: game.round,
       roomPlayersJoined: game.roomPlayersJoined,
       word: game.word ? game.word : null,
+      starterRoundPlayer: game.starterRoundPlayer ? game.starterRoundPlayer : null,
     };
 
     if (players) {

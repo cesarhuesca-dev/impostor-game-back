@@ -8,7 +8,8 @@
     "categoryEmpty" : "The category is empty",
     "noWatchers" : "No watchers access",
     "noImpostors": "No impostors",
-    "noWord": "No word"
+    "noWord": "No word",
+    "noStarterPlayer": "No turn starter player"
   },
   "player" : {
     "notFound" : "Player not found",
