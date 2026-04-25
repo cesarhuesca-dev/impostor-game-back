@@ -165,6 +165,6 @@ Each repository can be downloaded and implemented separately: <br>
 
 # 🙋 Contact
 
-**[<span style="font-size: xx-large; align-self: center;">📩</span>](mailto:cesarhuesca.dev@gmail.com)**
-**[![large-filled-linkedin](https://github.com/CLorant/readme-social-icons/raw/main/large/filled/linkedin.svg)](https://www.linkedin.com/in/cesarhuesca-dev/)**
-**[![large-filled-github](https://github.com/CLorant/readme-social-icons/raw/main/large/filled/github.svg)](https://github.com/cesarhuesca-dev)**
+**[Email](mailto:cesarhuesca.dev@gmail.com)**
+**[LinkedIn](https://www.linkedin.com/in/cesarhuesca-dev/)**
+**[GitHub](https://github.com/cesarhuesca-dev)**
