@@ -52,6 +52,8 @@ export class Player {
       avatarImg: player.avatarImg,
       impostor: player.impostor,
       roles: player.roles,
+      createdAt: player.createdAt.getTime(),
+      updatedAt: player.createdAt.getTime(),
     };
 
     if (gameInfo) {

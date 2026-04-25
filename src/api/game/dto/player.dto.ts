@@ -8,6 +8,7 @@ export interface PlayerDto {
   avatarImg: boolean;
   impostor: boolean;
   roles: UserRoles[];
-
+  createdAt: number;
+  updatedAt: number;
   game?: GameDto;
 }
