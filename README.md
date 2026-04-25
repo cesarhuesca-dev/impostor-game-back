@@ -96,8 +96,9 @@ Cada repositorio se puede descargar e implementar por separado:<br>
       DB_PORT= #Numero de puerto que usara la base de datos, el de defecto -> (5432)
       DB_HOST= #Url de comunicacion para la base de datos, esto depende segun el entorno (localhost o https://tu-dominio/)
 
-      HOST_API= #Url que se va a utilizar con la extension /api -> (http://localhost:3000/api)
-      HOST_FRONT= #Url que se va a utilizar en frontend -> (http://localhost:4200)
+      HOST_BACKEND= #Url que se va a utilizar con el backend sin la extension /api -> (http://localhost)
+      HOST_BACKEND_API= #Url que se va a utilizar con el backend CON la extension /api -> (http://localhost/api)
+      HOST_FRONT= #Url que se va a utilizar para el front -> (http://localhost)
 
       SERVER_PORT= #Numero de puerto que usara el servidor backend, el de defecto -> (3000)
       THROTTLE_TTL=60

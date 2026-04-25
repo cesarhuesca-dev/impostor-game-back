@@ -95,8 +95,9 @@ Each repository can be downloaded and implemented separately: <br>
       DB_PORT= # Database port (Default: 5432)
       DB_HOST= # Database host (localhost or your-domain.com)
 
-      HOST_API= # API URL with /api suffix -> (http://localhost:3000/api)
-      HOST_FRONT= # Frontend URL -> (http://localhost:4200)
+      HOST_BACKEND= #Backend API URL without /api suffix -> (http://localhost)
+      HOST_BACKEND_API= #Backend API URL with /api suffix -> (http://localhost/api)
+      HOST_FRONT= #Frontend URL -> (http://localhost)
 
       SERVER_PORT= # Backend server port (Default: 3000)
       THROTTLE_TTL=60

@@ -9,7 +9,6 @@ export interface EnvInterface {
   DB_NAME: string;
   DB_PORT: number;
   DB_HOST: string;
-  HOST_API: string;
   HOST_FRONT: string;
   SERVER_PORT: number;
   THROTTLE_TTL: number;
