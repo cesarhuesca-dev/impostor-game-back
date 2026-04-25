@@ -158,7 +158,8 @@ Each repository can be downloaded and implemented separately: <br>
 - ⚡ **Real-Time:** Seamless gameplay experience powered by WebSockets.
 - 🌍 **Multi-language:** Support for English, Spanish, German, French, Italian, and Portuguese.
 - 🎨 **Modern Design:** Minimalist and responsive dark interface.
-
+- 🧽 **Cleaning:** From time to time, the database is cleaned to avoid trash.
+- 🎥 **Overlay:** Template for broadcasts, menu deactivatable with double click on the screen.
 ---
 
 # 🙋 Contact

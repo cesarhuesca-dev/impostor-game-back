@@ -159,6 +159,8 @@ Cada repositorio se puede descargar e implementar por separado:<br>
 -   ⚡ **Tiempo Real:** Experiencia de juego fluida gracias a WebSockets.
 -   🌍 **Multi-idioma:** Soporte a Inglés, Alemán, Francés, Italiano y Portugués.
 -   🎨 **Diseño Moderno:** Interfaz
+-   🧽 **Limpieza:** Cada cierto tiempo se hace limpieza de la base de datos para evitar basura.
+-   🎥 **Overlay:** Plantilla para retransmisiones, menu desactivable con doble click en la pantalla.
 
 
 
